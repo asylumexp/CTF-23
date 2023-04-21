@@ -39,7 +39,7 @@ class Red5(RedBot):
     def PINQLIANG(self):
         # * Drive until in position in upper region
         if self.x <= 644 or self.x >= 656:
-            self.turn_towards(650, 25, Globals.FAST)
+            self.turn_towards(650, 75, Globals.FAST)
             self.drive_forward(Globals.FAST)
         # * If that the area, start the bait prepare
         else:
