@@ -8,9 +8,11 @@ class STATE(Enum):
     JAILBREAK = 2
     RETURN = 3
 
+
 class Blue2(BlueBot):
     def __init__(self, room, x, y):
         BlueBot.__init__(self, room, x, y)
+        self.set_image("Images/b2.png", 25, 25)
 
         self.curr_state = STATE.RETURN
 
@@ -18,7 +20,7 @@ class Blue2(BlueBot):
         if self.x > 620:
             self.curr_state == STATE.RETURN
         # Lame declaring outside init becuz of weird glitch with gameframe
-        self.psuedoflagx=Globals.red_flag.x+250
+        self.psuedoflagx = Globals.red_flag.x + 250
         if self.curr_state == STATE.WAIT:
             self.wait()
         elif self.curr_state == STATE.ATTACK:
@@ -45,8 +47,8 @@ class Blue2(BlueBot):
 
     def attack(self):
         bot, distance = self.closest_enemy_to_flag()
-        angle = self.angleRelative(bot.x,bot.y)
-        self.turn_towards(bot.x-20, bot.y, Globals.FAST)
+        angle = self.angleRelative(bot.x, bot.y)
+        self.turn_towards(bot.x - 20, bot.y, Globals.FAST)
         if distance < 200 and angle < 70:
             self.drive_forward(Globals.FAST)
         if distance > 200:
@@ -61,16 +63,21 @@ class Blue2(BlueBot):
         if not bot_jailed:
             self.curr_state = STATE.RETURN
         else:
-            angle = self.angleRelative(0,0)
-            self.turn_towards(0,0, Globals.FAST)
-            if angle <120:
+            angle = self.angleRelative(0, 0)
+            self.turn_towards(0, 0, Globals.FAST)
+            if angle < 120:
                 self.drive_forward(Globals.FAST)
 
     def return_home(self):
-        #if self.x <= self.psuedoflagx-40 or self.x >= self.psuedoflagx-50:
-            #self.turn_towards(self.psuedoflagx-40, Globals.red_flag.y, Globals.FAST)
-            #self.drive_forward(Globals.FAST)
-        if self.point_to_point_distance(self.x, self.y, self.psuedoflagx, Globals.red_flag.y) > 30:
+        # if self.x <= self.psuedoflagx-40 or self.x >= self.psuedoflagx-50:
+        # self.turn_towards(self.psuedoflagx-40, Globals.red_flag.y, Globals.FAST)
+        # self.drive_forward(Globals.FAST)
+        if (
+            self.point_to_point_distance(
+                self.x, self.y, self.psuedoflagx, Globals.red_flag.y
+            )
+            > 30
+        ):
             self.turn_towards(self.psuedoflagx, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         else:
@@ -78,11 +85,13 @@ class Blue2(BlueBot):
 
     def closest_enemy_to_flag(self):
         closest_bot = Globals.red_bots[0]
-        shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y,
-                                                         self.psuedoflagx, Globals.red_flag.y)
+        shortest_distance = self.point_to_point_distance(
+            closest_bot.x, closest_bot.y, self.psuedoflagx, Globals.red_flag.y
+        )
         for curr_bot in Globals.red_bots:
-            curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y,
-                                                         self.psuedoflagx, Globals.red_flag.y)
+            curr_bot_dist = self.point_to_point_distance(
+                curr_bot.x, curr_bot.y, self.psuedoflagx, Globals.red_flag.y
+            )
             if curr_bot_dist < shortest_distance:
                 shortest_distance = curr_bot_dist
                 closest_bot = curr_bot
@@ -91,10 +100,11 @@ class Blue2(BlueBot):
 
     def angleRelative(self, x, y):
         angle = self.NormalizedAngle(x, y)
-        diffangle = min(abs(self.angle-angle), 360-abs(self.angle-angle))
+        diffangle = min(abs(self.angle - angle), 360 - abs(self.angle - angle))
         return diffangle
 
-    def NormalizedAngle(self,x,y):
-        angle = self.get_rotation_to_coordinate(x,y)
-        if angle < 0: angle += 360
+    def NormalizedAngle(self, x, y):
+        angle = self.get_rotation_to_coordinate(x, y)
+        if angle < 0:
+            angle += 360
         return angle
