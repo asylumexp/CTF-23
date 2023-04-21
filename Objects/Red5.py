@@ -76,7 +76,7 @@ class Red5(RedBot):
         bot, distance = self.closest_enemy_to_bot()
         distance = self.point_to_point_distance(self.x, self.y, bot.x, bot.y)
         angle = abs(self.angleRelative(bot.x, bot.y))
-        if self.x >= 1200 and self.y >= 650:
+        if self.x >= 1100 and self.y >= 600:
             self.curr_state = STATE.JAIL
         elif angle < 60 and distance < 200 and not self.has_flag:
             self.evadeBots()

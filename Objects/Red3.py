@@ -58,7 +58,7 @@ class Red3(RedBot):
     def bait(self):
         bot, distance = self.closest_enemy_to_self(True)
         angle = abs(self.angleRelative(bot.x, bot.y))
-        if self.x >= 1200 and self.y >= 650:
+        if self.x >= 1100 and self.y >= 600:
             self.curr_state = STATE.JAIL
         # ? move across border, evading enemies
         elif angle < 60 and distance < 200 and not self.has_flag:

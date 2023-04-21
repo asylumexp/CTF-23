@@ -50,15 +50,16 @@ class Red4(RedBot):
         bot, distance = self.closest_enemy_to_flag()
         # todo Check for enemies
         Globals.red_bots[0].bot4ready = True
-        if distance < 250:
-            self.curr_state = STATE.ATTACK
-        elif Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot5ready:
+        
+        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot5ready:
             self.curr_state = STATE.BAIT
+        elif distance < 250:
+            self.curr_state = STATE.ATTACK
 
     def bait(self):
         bot, distance = self.closest_enemy_to_self(True)
         angle = abs(self.angleRelative(bot.x, bot.y))
-        if self.x >= 1200 and self.y >= 650:
+        if self.x >= 1100 and self.y >= 600:
             self.curr_state = STATE.JAIL
         # ? move across border, evading enemies
         elif (
@@ -108,12 +109,12 @@ class Red4(RedBot):
 
     def attack(self):
         bot, dista = self.closest_enemy_to_flag()
-        print(dista, bot)
+        # print(dista, bot)
         # todo - attack bots
         if dista <= 200 and bot.x > 650:
             if dista < 200:
                 i = self.angleRelative(bot.x + 30, bot.y)
-                print(i)
+                # print(i)
                 if i < 0 or i > 40:
                     self.turn_towards(bot.x + 30, bot.y, Globals.FAST)
                 else:

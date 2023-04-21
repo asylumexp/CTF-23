@@ -32,7 +32,7 @@ class Red2(RedBot):
             self.curr_state = STATE.WAIT
 
     def wait(self):
-        bot, distance = self.closest_enemy_to_flag()
+        bot, distance = self.closest_enemy_to_self(False)
         if distance < 200:
             self.curr_state = STATE.ATTACK
         else:
@@ -62,10 +62,8 @@ class Red2(RedBot):
         if not bot_jailed:
             self.curr_state = STATE.RETURN
         else:
-            angle = self.angleRelative(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT)
-            self.turn_towards(
-                Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT - 75, Globals.FAST
-            )
+            angle = self.angleRelative(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT - 75)
+            self.turn_towards(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT - 75, Globals.FAST)
             if angle < 120:
                 self.drive_forward(Globals.FAST)
 
@@ -109,3 +107,30 @@ class Red2(RedBot):
         if angle < 0:
             angle += 360
         return angle
+
+    def closest_enemy_to_self(self, ignore):
+        # todo - make more efficient
+        closest_bot = Globals.blue_bots[0]
+        closer_bot = Globals.red_bots[0]
+        shortest_distance = self.point_to_point_distance(
+            closest_bot.x, closest_bot.y, self.x, self.y
+        )
+        for curr_bot in Globals.blue_bots:
+            curr_bot_dist = self.point_to_point_distance(
+                curr_bot.x, curr_bot.y, self.x, self.y
+            )
+            for red_bot in Globals.red_bots:
+                # * check enemy distance from self to bot from loop
+                if curr_bot_dist < shortest_distance:
+                    curr_teammate_dist = self.point_to_point_distance(
+                        curr_bot.x, curr_bot.y, self.x, self.y
+                    )
+                    # * check if teammate is closer
+                    if curr_teammate_dist < curr_bot_dist and not ignore:
+                        shortest_distance = curr_bot_dist
+                        closest_bot = curr_bot
+                    elif ignore:
+                        shortest_distance = curr_bot_dist
+                        closest_bot = curr_bot
+
+        return closest_bot, shortest_distance
