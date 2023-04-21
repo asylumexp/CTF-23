@@ -1,4 +1,3 @@
-from Objects.DangerZone import DangerZone
 from Objects.Red1 import Red1
 from Objects.Red2 import Red2
 from Objects.Red3 import Red3

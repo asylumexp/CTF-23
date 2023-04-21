@@ -4,11 +4,11 @@ from GameFrame import Level, TextObject, Globals
 class EndScreen(Level):
     def __init__(self, screen):
         Level.__init__(self, screen)
-        if Globals.winner == 'Red':
-            winner = Globals.red_player
+        if Globals.winner == Globals.RED_FLAG_WINNER:
+            winner = Globals.red_team_name
             colour = (255, 0, 0)
-        elif Globals.winner == 'Blue':
-            winner = Globals.blue_player
+        elif Globals.winner == Globals.BLUE_FLAG_WINNER:
+            winner = Globals.blue_team_name
             colour = (0, 0, 255)
         else:
             winner = 'Draw'
@@ -41,10 +41,10 @@ class EndScreen(Level):
     def end_game(self):
         # Append the result to the file 'results.txt'
         log_file = open('results.txt', 'a')
-        if Globals.winner == 'Red':
-            log_file.write(Globals.red_player + ' ')
+        if Globals.winner == Globals.RED_FLAG_WINNER:
+            log_file.write("Red" + ' ')
         else:
-            log_file.write(Globals.blue_player + ' ')
+            log_file.write("Blue" + ' ')
         
         self.running = False
         self.quitting = True

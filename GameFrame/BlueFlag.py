@@ -1,13 +1,8 @@
-from GameFrame import RoomObject, Globals
+from GameFrame import Flag, Globals
 
 
-class BlueFlag(RoomObject):
+class BlueFlag(Flag):
     def __init__(self, room, x, y):
-        RoomObject.__init__(self, room, x, y)
-        red_flag_image = self.load_image('flag_blue.png')
-        self.set_image(red_flag_image, 32, 32)
-
-    def step(self):
-        if self.x < Globals.SCREEN_WIDTH/2:
-            Globals.winner = 'Blue'
-            self.room.running = False
+        Flag.__init__(self, room, x, y, 'flag_blue.png', Globals.BLUE_FLAG_WINNER)
+        
+        
