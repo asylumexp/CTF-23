@@ -11,3 +11,4 @@ from GameFrame.RedBot import RedBot
 from GameFrame.BlueBot import BlueBot
 from GameFrame.GenericBot import GenericBot
 from GameFrame.DangerZone import DangerZone
+from GameFrame.Logo import Logo
