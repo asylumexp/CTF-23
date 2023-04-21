@@ -66,7 +66,7 @@ class Red5(RedBot):
 
     #  * Checking for enemies
     def TIANSHUI(self):
-        distance = self.closest_enemy_to_bot()
+        bot, distance = self.closest_enemy_to_bot()
         if distance < 250:
             self.curr_state = STATE.HANDAN
 
@@ -75,7 +75,7 @@ class Red5(RedBot):
    
     # * Bait state
     def BAO(self):
-        bot = self.closest_enemy_to_bot()
+        bot, dist = self.closest_enemy_to_bot()
         ptpd = self.point_to_point_distance(self.x, self.y, bot.x, bot.y)
         angle = abs(self.angleRelative(bot.x, bot.y))
         if self.x >= 1100 and self.y >= 600:
@@ -118,7 +118,7 @@ class Red5(RedBot):
 
     # * Evade state
     def EVADE(self):
-        closest_enemy = self.closest_enemy_to_bot()
+        closest_enemy, dist = self.closest_enemy_to_bot()
         if self.angleRelative(closest_enemy.x, closest_enemy.y) < 0:
             self.turn_right(Globals.FAST)
             self.turn_right(Globals.MEDIUM)

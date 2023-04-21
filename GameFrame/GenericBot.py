@@ -66,10 +66,10 @@ class GenericBot(Bot):
 
         #Run the specific bot logic
         #todo could add in some custom exception handling for students
-        try:
-            self.tick()
-        except Exception:
-            print(self.COLOUR_STRING + " Exception occurred\n")
+        # try:
+        self.tick()
+        # except Exception:
+        #     print(self.COLOUR_STRING + " Exception occurred\n")
 
     def tick(self):
         pass

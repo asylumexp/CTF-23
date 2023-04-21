@@ -7,6 +7,7 @@ class STATE(Enum):
     ATTACK = 1
     JAILBREAK = 2
     RETURN = 3
+    EVADE = 4
 
 
 class Red2(RedBot):
