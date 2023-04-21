@@ -1,39 +1,78 @@
-from GameFrame import Globals
-from GameFrame.GenericBot import GenericBot
-import GameFrame.RedBot
+from GameFrame import Bot, Globals, RedFlag
 import GameFrame.BlueBot
 
-class RedBot(GenericBot):
+
+class RedBot(Bot):
     def __init__(self, room, x, y):
-        self.COLOUR = Globals.RED_COLOUR
-        self.set_colour_properties()
-        GenericBot.__init__(self, room, x, y)
+        Bot.__init__(self, room, x, y)
+        red_bot_image = self.load_image('bot_red.png')
+        self.set_image(red_bot_image, 25, 25)
 
-    def set_colour_properties(self):
-        self.FLAG_TO_STEAL_WINNER = Globals.RED_FLAG_WINNER
-        self.FLAG_TO_STEAL = Globals.red_flag
-        self.START_DIRECTION = 90
-        self.MY_TEAM_BOTS = Globals.red_bots
-        self.JAIL_POSITION = (Globals.GAME_AREA_WIDTH_MAX - 25, Globals.GAME_AREA_HEIGHT_MAX - 25 )
-        self.IMAGE = 'bot_red.png'
-        self.FLAG_NAME = 'RedFlag'
-        self.COLOUR_STRING = 'Red'
-        self.OTHER_TEAM_BOT_OBJECT = GameFrame.BlueBot
-        self.MY_TEAM_BOT_OBJECT = GameFrame.RedBot
-    
-    # Helper method to set the global flag x and y depending on what colour the bot is
-    def set_flag_position(self, x, y):
-        Globals.red_flag.x = x
-        Globals.red_flag.y = y
-    
-    #Helper method to get the global flag x and y depending on what colour the bot is
-    def get_flag(self):
-        return Globals.red_flag
-        
-    #Helper set the flag heigh
-    def set_local_flag_height(self):
-        self.FLAG_HEIGHT = Globals.red_flag.rect.height
+        self.rotate(90)
 
-    #Helper method to add to the global scores of each team
-    def add_points_close_to_flag(self, points):
-        Globals.red_enemy_side_time += points
+        self.register_collision_object('Blue1')
+        self.register_collision_object('Blue2')
+        self.register_collision_object('Blue3')
+        self.register_collision_object('Blue4')
+        self.register_collision_object('Blue5')
+        self.register_collision_object('RedFlag')
+        self.register_collision_object('Red1')
+        self.register_collision_object('Red2')
+        self.register_collision_object('Red3')
+        self.register_collision_object('Red4')
+        self.register_collision_object('Red5')
+
+    def frame(self):
+        if self.has_flag:
+            if self.x < Globals.SCREEN_WIDTH / 2 + Globals.SCREEN_WIDTH / 4:
+                Globals.red_flag.x = self.x - Globals.red_flag.rect.width - 2
+                Globals.red_flag.y = self.y
+
+                if Globals.red_flag.x <= 0:
+                    Globals.red_flag.x = 0
+
+                if Globals.red_flag.y <= 0:
+                    Globals.red_flag.y = 0
+                elif self.y + Globals.red_flag.rect.height >= Globals.SCREEN_HEIGHT:
+                    Globals.red_flag.y = Globals.SCREEN_HEIGHT - Globals.red_flag.rect.height
+            else:
+                self.has_flag = False
+
+        if self.x < Globals.SCREEN_WIDTH / 2:
+            Globals.red_enemy_side_time += 1
+            distance = self.point_to_point_distance(self.x, self.y, Globals.red_flag.x, Globals.red_flag.y)
+            if self.has_flag:
+                Globals.red_enemy_side_time += 50
+            elif distance < 50:
+                Globals.red_enemy_side_time += 30
+            elif distance < 150:
+                Globals.red_enemy_side_time += 20
+            elif distance < 250:
+                Globals.red_enemy_side_time += 10
+
+        try:
+            self.tick()
+        except Exception:
+            print("Red Exception occurred\n")
+
+    def tick(self):
+        pass
+
+    def handle_collision(self, other):
+        if isinstance(other, RedFlag):
+            self.has_flag = True
+            for bot in Globals.red_bots:
+                if bot.has_flag and bot is not self:
+                    self.has_flag = False
+                    break
+        elif isinstance(other, GameFrame.BlueBot):
+            if self.x < Globals.SCREEN_WIDTH / 2 and not other.jailed:
+                self.has_flag = False
+                self.curr_rotation = 0
+                self.rotate(90)
+                self.x = Globals.SCREEN_WIDTH - 36
+                self.y = Globals.SCREEN_HEIGHT - 40
+                self.jailed = True
+        elif isinstance(other, RedBot):
+            if not other.jailed:
+                self.jailed = False

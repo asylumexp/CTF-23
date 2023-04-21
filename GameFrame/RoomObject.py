@@ -32,16 +32,8 @@ class RoomObject:
     def load_image(self, file_name):
         return os.path.join('Images', file_name)
 
-    # Set the image and size of image of a room object, where height or width is not set / set at -1 it will be a ratio of the original
-    def set_image(self, image, width = -1, height = -1):
+    def set_image(self, image, width, height):
         self.image_orig = pygame.image.load(image).convert_alpha()
-        if width == -1 and height == -1:
-            pass
-        elif height == -1:
-            height = (self.image_orig.get_height() / self.image_orig.get_width()) * width
-        elif width == -1:
-            width = (self.image_orig.get_width() / self.image_orig.get_height())  * height
-        
         self.image_orig = pygame.transform.scale(self.image_orig, (width, height))
         self.width = width
         self.height = height

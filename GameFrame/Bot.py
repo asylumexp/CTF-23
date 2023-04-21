@@ -13,14 +13,14 @@ class Bot(RoomObject):
     def step(self):
         if not self.jailed:
             self.frame()
-            if self.x <= Globals.GAME_AREA_WIDTH_MIN:
+            if self.x <= 0:
                 self.blocked()
-            elif self.x >= Globals.GAME_AREA_WIDTH_MAX - self.width:
+            elif self.x >= Globals.SCREEN_WIDTH - self.width:
                 self.blocked()
 
-            if self.y <= Globals.GAME_AREA_HEIGHT_MIN:
+            if self.y <= 0:
                 self.blocked()
-            elif self.y >= Globals.GAME_AREA_HEIGHT_MAX - self.height:
+            elif self.y >= Globals.SCREEN_HEIGHT - self.height:
                 self.blocked()
 
     def frame(self):

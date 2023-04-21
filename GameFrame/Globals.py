@@ -1,30 +1,11 @@
+
 class Globals:
-    
+
     running = True
     FRAMES_PER_SECOND = 30
 
-    # Constants for game logic 
-    RED_COLOUR = 1
-    BLUE_COLOUR = 2
-    RED_FLAG_WINNER = 1
-    BLUE_FLAG_WINNER = 2
-
-    # Team names to be displayed during match and at end screen
-    red_team_name = "Team Uno"
-    blue_team_name = "Team Two"
-    # Team Logos to be displayed during match
-    red_team_logo = "TeamLogos\Team1.png"
-    blue_team_logo = "TeamLogos\Team2.png"
-
-    # Size of game screen
     SCREEN_WIDTH = 1280
     SCREEN_HEIGHT = 720
-
-    # Bounding dimensions for the areas bots can move
-    GAME_AREA_WIDTH_MIN = 32
-    GAME_AREA_HEIGHT_MIN = 64
-    GAME_AREA_WIDTH_MAX= SCREEN_WIDTH - GAME_AREA_WIDTH_MIN
-    GAME_AREA_HEIGHT_MAX = SCREEN_HEIGHT - GAME_AREA_HEIGHT_MIN
 
     SCORE = 0
 
@@ -36,6 +17,10 @@ class Globals:
 
     # - Set the order of the rooms - #
     levels = ["Arena", "EndScreen"]
+
+    red_player = 'Red'
+
+    blue_player = 'Blue'
 
     background_music = 0
 
