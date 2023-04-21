@@ -63,7 +63,9 @@ class Red2(RedBot):
             self.curr_state = STATE.RETURN
         else:
             angle = self.angleRelative(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT)
-            self.turn_towards(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT, Globals.FAST)
+            self.turn_towards(
+                Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT - 75, Globals.FAST
+            )
             if angle < 120:
                 self.drive_forward(Globals.FAST)
 

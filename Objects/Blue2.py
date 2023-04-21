@@ -64,7 +64,7 @@ class Blue2(BlueBot):
             self.curr_state = STATE.RETURN
         else:
             angle = self.angleRelative(0, 0)
-            self.turn_towards(0, 0, Globals.FAST)
+            self.turn_towards(0, 75, Globals.FAST)
             if angle < 120:
                 self.drive_forward(Globals.FAST)
 
