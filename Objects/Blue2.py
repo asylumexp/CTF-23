@@ -63,8 +63,8 @@ class Blue2(BlueBot):
         if not bot_jailed:
             self.curr_state = STATE.RETURN
         else:
-            angle = self.angleRelative(0, 0)
-            self.turn_towards(0, 75, Globals.FAST)
+            angle = self.angleRelative(50, 75)
+            self.turn_towards(50, 75, Globals.FAST)
             if angle < 120:
                 self.drive_forward(Globals.FAST)
 
@@ -72,14 +72,12 @@ class Blue2(BlueBot):
         # if self.x <= self.psuedoflagx-40 or self.x >= self.psuedoflagx-50:
         # self.turn_towards(self.psuedoflagx-40, Globals.red_flag.y, Globals.FAST)
         # self.drive_forward(Globals.FAST)
-        if (
-            self.point_to_point_distance(
-                self.x, self.y, self.psuedoflagx, Globals.red_flag.y
-            )
-            > 30
-        ):
-            self.turn_towards(self.psuedoflagx, Globals.red_flag.y, Globals.FAST)
-            self.drive_forward(Globals.FAST)
+        if (self.point_to_point_distance(self.x, self.y, self.psuedoflagx, Globals.red_flag.y) > 30):
+            i = self.angleRelative(self.psuedoflagx, Globals.red_flag.y)
+            if i < 0 or i > 40:
+                self.turn_towards(self.psuedoflagx, Globals.red_flag.y, Globals.FAST)
+            else:
+                self.drive_forward(Globals.FAST)
         else:
             self.curr_state = STATE.WAIT
 
