@@ -20,11 +20,11 @@ class Red3(RedBot):
 
     def tick(self):
         if self.curr_state == STATE.WAIT:
-            self.wait()
+            self.bait_bot_prepare(650, 600, STATE.PREPARE)
         elif self.curr_state == STATE.FLAG:
             self.flag()
         elif self.curr_state == STATE.PREPARE:
-            self.prepare()
+            self.bait_bot_wait(3, STATE.BAIT)
         elif self.curr_state == STATE.BAIT:
             self.bait()
         elif self.curr_state == STATE.JAIL:
@@ -34,26 +34,48 @@ class Red3(RedBot):
         else:
             self.curr_state = STATE.WAIT
 
-    #
-    def wait(self):
+    def bait_bot_prepare(self, bait_position_x: int, bait_position_y: int, wait_state: STATE):
+        """Prepare State for the Bait bots
+        
+        This state moves the bot to the bait position and will in the future attack others
+
+        Args:
+            bait_position_x (int): x pos for bait position.
+            bait_position_y (int): y pos for bait position.
+            wait_state (STATE): state for waiting until all bots are ready.
+        """
+        
         bot, distance = self.closest_enemy_to_flag()
         # Stay and or move close to the top border
-        if self.x <= 644 or self.x >= 656:
-            self.turn_towards(650, 600, Globals.FAST)
+        if self.x <= bait_position_x - 6 or self.x >= bait_position_x + 6:
+            self.turn_towards(bait_position_x, bait_position_y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         # todo Check for enemies
         # if distance < 250 and bot.x > 650:
         #     self.curr_state = STATE.ATTACK
         # todo Wait for Bait
-
         else:
-            self.curr_state = STATE.PREPARE
+            self.curr_state = wait_state
             # * self.curr_state = STATE.FLAG
 
-    def prepare(self):
-        Globals.red_bots[0].bot3ready = True
-        if Globals.red_bots[0].bot4ready and Globals.red_bots[0].bot5ready:
-            self.curr_state = STATE.BAIT
+    def bait_bot_wait(self, bot: int, bait_state: STATE):
+        """Bait Bot Waiting State
+        
+        This is the state where the bots wait in until they are ready to go attack.
+
+        Args:
+            bot (int): the number that the bot is so the others know who is ready
+            bait_state (STATE): the state for attacking.
+        """
+        if bot == 3:
+             Globals.red_bots[0].bot3 = True
+        elif bot == 4:
+            Globals.red_bots[0].bot4 = True
+        elif bot == 5:
+            Globals.red_bots[0].bot5 = True
+
+        if Globals.red_bots[0].bot3 and Globals.red_bots[0].bot4ready and Globals.red_bots[0].bot5ready:
+            self.curr_state = bait_state
 
     def bait(self):
         bot, distance = self.closest_enemy_to_self(True)
