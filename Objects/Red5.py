@@ -3,7 +3,6 @@ from enum import Enum
 
 
 class STATE(Enum):
-    MICHIGAN = 0  # * Wait state
     MISSOURI = 1  # * Strike state
     NORTH_CAROLINA = 2  # * Move to area state
     BALTIMORE = 3  # * Bait state
@@ -23,8 +22,6 @@ class Red5(RedBot):
             Globals.red_bots[2].bait_bot_prepare(self, 650, 75, STATE.BAIT_TRUE)
         elif self.curr_state == STATE.MISSOURI:
             self.MISSOURI()
-        elif self.curr_state == STATE.MICHIGAN:
-            self.MICHIGAN()
         elif self.curr_state == STATE.BAIT_TRUE:
             Globals.red_bots[2].bait_bot_wait(self, STATE.BALTIMORE) # * Waiting for other bait bots
         elif self.curr_state == STATE.BALTIMORE:
@@ -40,18 +37,9 @@ class Red5(RedBot):
         bot, distance = self.closest_enemy_to_bot()
         angle = self.angleRelative(bot.x, bot.y)
         self.turn_towards(bot.x, bot.y, Globals.SLOW)
-        if distance < 100 and angle < 70:
+        if distance < 250 and angle < 70:
             self.drive_forward(Globals.FAST)
-        if distance > 100:
-            self.curr_state = STATE.MICHIGAN
-
-    #  * Checking for enemies
-    def MICHIGAN(self):
-        bot, distance = self.closest_enemy_to_bot()
-        if distance < 250:
-            self.curr_state = STATE.MISSOURI
-
-        else:
+        if distance > 250:
             self.curr_state = STATE.NORTH_CAROLINA
    
     # * Bait state
@@ -86,7 +74,7 @@ class Red5(RedBot):
 
     #*not in jail state
     def Acquitted(self):
-        self.curr_state = STATE.MICHIGAN
+        self.curr_state = STATE.MISSOURI
 
     # *evade function
     #not me not so subtley using the frame stacking bug
