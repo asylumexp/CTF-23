@@ -9,7 +9,6 @@ class STATE(Enum):
     JAIL = 5
     HOME = 6
 
-
 class Red4(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
