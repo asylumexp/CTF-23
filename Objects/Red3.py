@@ -65,6 +65,11 @@ class Red3(RedBot):
             # * self.curr_state = STATE.FLAG
 
     @staticmethod
+    def general_stack_turn(self: RedBot, amount):
+        for i in range(int(amount+125/3.2698548073713)):
+            self.turn_right()
+    
+    @staticmethod
     def bait_bot_wait(self: RedBot, bait_state: STATE):
         """Bait Bot Waiting State
         

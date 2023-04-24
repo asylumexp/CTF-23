@@ -29,7 +29,7 @@ class Red5(RedBot):
         elif self.curr_state == STATE.JAIL:
             Globals.red_bots[2].general_bot_jailed(self, STATE.MISSOURI)
         else:
-            self.curr_state = STATE.MICHIGAN
+            self.curr_state = STATE.NORTH_CAROLINA
 
     # *evade function
     #not me not so subtley using the frame stacking bug
