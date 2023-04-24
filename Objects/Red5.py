@@ -20,7 +20,7 @@ class Red5(RedBot):
     def tick(self):
         # * States
         if self.curr_state == STATE.NORTH_CAROLINA:
-            self.NORTH_CAROLINA()
+            Globals.red_bots[2].bait_bot_prepare(self, 650, 75, STATE.BAIT_TRUE)
         elif self.curr_state == STATE.MISSOURI:
             self.MISSOURI()
         elif self.curr_state == STATE.MICHIGAN:
@@ -33,16 +33,6 @@ class Red5(RedBot):
             self.JAIL()
         else:
             self.curr_state = STATE.MICHIGAN
-
-    # * Moving to prepare area
-    def NORTH_CAROLINA(self):
-        # * Drive until in position in upper region
-        if self.x <= 644 or self.x >= 656:
-            self.turn_towards(650, 75, Globals.FAST)
-            self.drive_forward(Globals.FAST)
-        # * If that the area, start the bait prepare
-        else:
-            self.curr_state = STATE.BAIT_TRUE
 
     # * Attack State
     def MISSOURI(self):
