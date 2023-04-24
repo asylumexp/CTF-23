@@ -1,7 +1,6 @@
 from GameFrame import RedBot, Globals
 from enum import Enum
 
-
 class STATE(Enum):
     WAIT = 1
     ATTACK = 2
@@ -19,7 +18,7 @@ class Red4(RedBot):
 
     def tick(self):
         if self.curr_state == STATE.WAIT:
-            self.wait()
+            Globals.red_bots[2].bait_bot_prepare(self, 650, 250, STATE.PREPARE)
         elif self.curr_state == STATE.ATTACK:
             self.attack()
         elif self.curr_state == STATE.PREPARE:
@@ -33,19 +32,6 @@ class Red4(RedBot):
         else:
             self.curr_state = STATE.WAIT
 
-    def wait(self):
-        bot, distance = self.closest_enemy_to_flag()
-        # todo Check for enemies
-        if distance < 250:
-            self.attack()
-        # * Stay and or move close to the top border
-        if self.x <= 644 or self.x >= 656:
-            self.turn_towards(650, 250, Globals.FAST)
-            self.drive_forward(Globals.FAST)
-        # * Wait for Bait
-        else:
-            self.curr_state = STATE.PREPARE
-
     def prepare(self):
         bot, distance = self.closest_enemy_to_flag()
         # todo Check for enemies
@@ -53,8 +39,6 @@ class Red4(RedBot):
         
         if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot5ready:
             self.curr_state = STATE.BAIT
-        elif distance < 250:
-            self.curr_state = STATE.ATTACK
 
     def bait(self):
         bot, distance = self.closest_enemy_to_self(True)

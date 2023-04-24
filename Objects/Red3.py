@@ -20,7 +20,7 @@ class Red3(RedBot):
 
     def tick(self):
         if self.curr_state == STATE.WAIT:
-            self.bait_bot_prepare(650, 600, STATE.PREPARE)
+            self.bait_bot_prepare(self, 650, 600, STATE.PREPARE)
         elif self.curr_state == STATE.FLAG:
             self.flag()
         elif self.curr_state == STATE.PREPARE:
@@ -33,8 +33,9 @@ class Red3(RedBot):
             self.gohome()
         else:
             self.curr_state = STATE.WAIT
-
-    def bait_bot_prepare(self, bait_position_x: int, bait_position_y: int, wait_state: STATE):
+    
+    @staticmethod
+    def bait_bot_prepare(self: RedBot, bait_position_x: int, bait_position_y: int, wait_state: STATE):
         """Prepare State for the Bait bots
         
         This state moves the bot to the bait position and will in the future attack others
@@ -68,13 +69,13 @@ class Red3(RedBot):
             bait_state (STATE): the state for attacking.
         """
         if bot == 3:
-             Globals.red_bots[0].bot3 = True
+             Globals.red_bots[0].bot3ready = True
         elif bot == 4:
-            Globals.red_bots[0].bot4 = True
+            Globals.red_bots[0].bot4ready = True
         elif bot == 5:
-            Globals.red_bots[0].bot5 = True
+            Globals.red_bots[0].bot5ready = True
 
-        if Globals.red_bots[0].bot3 and Globals.red_bots[0].bot4ready and Globals.red_bots[0].bot5ready:
+        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot4ready and Globals.red_bots[0].bot5ready:
             self.curr_state = bait_state
 
     def bait(self):
