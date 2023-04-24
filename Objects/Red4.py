@@ -22,7 +22,7 @@ class Red4(RedBot):
         elif self.curr_state == STATE.ATTACK:
             self.attack()
         elif self.curr_state == STATE.PREPARE:
-            self.prepare()
+            Globals.red_bots[2].bait_bot_wait(self, 4, STATE.BAIT)
         elif self.curr_state == STATE.BAIT:
             self.bait()
         elif self.curr_state == STATE.JAIL:
@@ -31,14 +31,6 @@ class Red4(RedBot):
             self.gohome()
         else:
             self.curr_state = STATE.WAIT
-
-    def prepare(self):
-        bot, distance = self.closest_enemy_to_flag()
-        # todo Check for enemies
-        Globals.red_bots[0].bot4ready = True
-        
-        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot5ready:
-            self.curr_state = STATE.BAIT
 
     def bait(self):
         bot, distance = self.closest_enemy_to_self(True)

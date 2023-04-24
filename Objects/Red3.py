@@ -24,7 +24,7 @@ class Red3(RedBot):
         elif self.curr_state == STATE.FLAG:
             self.flag()
         elif self.curr_state == STATE.PREPARE:
-            self.bait_bot_wait(3, STATE.BAIT)
+            self.bait_bot_wait(self, 3, STATE.BAIT)
         elif self.curr_state == STATE.BAIT:
             self.bait()
         elif self.curr_state == STATE.JAIL:
@@ -59,7 +59,8 @@ class Red3(RedBot):
             self.curr_state = wait_state
             # * self.curr_state = STATE.FLAG
 
-    def bait_bot_wait(self, bot: int, bait_state: STATE):
+    @staticmethod
+    def bait_bot_wait(self: RedBot, bot: int, bait_state: STATE):
         """Bait Bot Waiting State
         
         This is the state where the bots wait in until they are ready to go attack.
@@ -79,7 +80,7 @@ class Red3(RedBot):
             self.curr_state = bait_state
 
     def bait(self):
-        bot, distance = self.closest_enemy_to_self(True)
+        bot, distance = Globals.red_bots[2].closest_enemy_to_self(True)
         angle = abs(self.angleRelative(bot.x, bot.y))
         if self.x >= 1100 and self.y >= 600:
             self.curr_state = STATE.JAIL
@@ -113,7 +114,7 @@ class Red3(RedBot):
 
     # * Evade bots
     def evadeBots(self):
-        closest_enemy, dist = self.closest_enemy_to_self(True)
+        closest_enemy, dist = Globals.red_bots[2].closest_enemy_to_self(True)
         if self.angleRelative(closest_enemy.x, closest_enemy.y) < 0:
             self.turn_right(Globals.MEDIUM)
         else:
@@ -123,7 +124,7 @@ class Red3(RedBot):
 
     # * Get opposite direction from self, from winner 2020 code
     def oppositeDirection(self):
-        closest_bot, dist = self.closest_enemy_to_self(True)
+        closest_bot, dist = Globals.red_bots[2].closest_enemy_to_self(True)
         pointX = self.x - closest_bot.x
         pointY = self.y - closest_bot.y
         return pointX, pointY
@@ -156,13 +157,9 @@ class Red3(RedBot):
         # todo - make more efficient
         closest_bot = Globals.blue_bots[0]
         closer_bot = Globals.red_bots[0]
-        shortest_distance = self.point_to_point_distance(
-            closest_bot.x, closest_bot.y, self.x, self.y
-        )
+        shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y, self.x, self.y)
         for curr_bot in Globals.blue_bots:
-            curr_bot_dist = self.point_to_point_distance(
-                curr_bot.x, curr_bot.y, self.x, self.y
-            )
+            curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y, self.x, self.y)
             for red_bot in Globals.red_bots:
                 # * check enemy distance from self to bot from loop
                 if curr_bot_dist < shortest_distance:
