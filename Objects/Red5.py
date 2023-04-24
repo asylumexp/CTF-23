@@ -27,7 +27,7 @@ class Red5(RedBot):
         elif self.curr_state == STATE.BALTIMORE:
             self.BALTIMORE()
         elif self.curr_state == STATE.JAIL:
-            self.JAIL()
+            Globals.red_bots[2].general_bot_jailed(self, STATE.MISSOURI)
         else:
             self.curr_state = STATE.MICHIGAN
 
@@ -63,18 +63,6 @@ class Red5(RedBot):
             self.drive_forward(Globals.FAST)
         else:
             print("PASS, RED5 BALTIMORE()")
-
-    # * Jail state
-    def JAIL(self):
-        Globals.red_bots[0].bot5ready = False
-        if not self.jailed:
-            self.Acquitted()
-
-    # ** Helper Functions **
-
-    #*not in jail state
-    def Acquitted(self):
-        self.curr_state = STATE.MISSOURI
 
     # *evade function
     #not me not so subtley using the frame stacking bug
