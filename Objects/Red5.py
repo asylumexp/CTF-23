@@ -21,7 +21,7 @@ class Red5(RedBot):
         if self.curr_state == STATE.NORTH_CAROLINA:
             Globals.red_bots[2].bait_bot_prepare(self, 650, 75, STATE.BAIT_TRUE)
         elif self.curr_state == STATE.MISSOURI:
-            self.MISSOURI()
+            Globals.red_bots[2].general_bot_attack(self, STATE.NORTH_CAROLINA)
         elif self.curr_state == STATE.BAIT_TRUE:
             Globals.red_bots[2].bait_bot_wait(self, STATE.BALTIMORE) # * Waiting for other bait bots
         elif self.curr_state == STATE.BALTIMORE:
@@ -31,17 +31,6 @@ class Red5(RedBot):
         else:
             self.curr_state = STATE.MICHIGAN
 
-    # * Attack State
-    def MISSOURI(self):
-        # * Check for bot
-        bot, distance = self.closest_enemy_to_bot()
-        angle = self.angleRelative(bot.x, bot.y)
-        self.turn_towards(bot.x, bot.y, Globals.SLOW)
-        if distance < 250 and angle < 70:
-            self.drive_forward(Globals.FAST)
-        if distance > 250:
-            self.curr_state = STATE.NORTH_CAROLINA
-   
     # * Bait state
     def BALTIMORE(self):
         bot, dist = self.closest_enemy_to_bot()

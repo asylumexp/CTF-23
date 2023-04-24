@@ -143,11 +143,13 @@ class Red3(RedBot):
             next_state (STATE): state to change to immediately.
             dist (int, default: 250): maximum distance to target them
         """
-        bot, distance = Globals.red_bots[2].closest_enemy_to_flag()
-        if distance < dist:
-            self.turn_towards(bot.x, bot.y, Globals.FAST)
+        # * Check for bot
+        bot, distance = Globals.red_bots[2].closest_enemy_to_bot()
+        angle = Globals.red_bots[2].angleRelative(bot.x, bot.y)
+        self.turn_towards(bot.x, bot.y, Globals.SLOW)
+        if distance < 250 and angle < 70:
             self.drive_forward(Globals.FAST)
-        else:
+        if distance > 250:
             self.curr_state = return_state
 
     """
