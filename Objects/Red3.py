@@ -103,7 +103,7 @@ class Red3(RedBot):
             self.curr_state = jail_state
         # ? move across border, evading enemies
         elif angle < 60 and distance < 200 and not self.has_flag:
-            Globals.red_bots[2].evadeBots()
+            Globals.red_bots[2].evadeBots(self)
         elif not self.has_flag:
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
@@ -166,9 +166,13 @@ class Red3(RedBot):
     Helper Functions
     """
 
-    # * Evade bots
-    def evadeBots(self):
+    # * Evade bots\
+    @staticmethod
+    def evadeBots(self: RedBot):
+        
         closest_enemy, dist = Globals.red_bots[2].closest_enemy_to_self(True)
+        if self == Globals.red_bots[3]:
+            print(closest_enemy, dist)
         if Globals.red_bots[2].angleRelative(closest_enemy.x, closest_enemy.y) < 0:
             self.turn_right(Globals.MEDIUM)
         else:
