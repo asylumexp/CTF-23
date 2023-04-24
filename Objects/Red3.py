@@ -4,7 +4,7 @@ from enum import Enum
 
 class STATE(Enum):
     WAIT = 1
-    FLAG = 3
+    ATTACK = 2
     PREPARE = 4
     BAIT = 5
     JAIL = 6
@@ -21,16 +21,16 @@ class Red3(RedBot):
     def tick(self):
         if self.curr_state == STATE.WAIT:
             self.bait_bot_prepare(self, 650, 600, STATE.PREPARE)
-        elif self.curr_state == STATE.FLAG:
-            self.flag()
+        elif self.curr_state == STATE.ATTACK:
+            self.general_bot_attack(self, STATE.WAIT)
         elif self.curr_state == STATE.PREPARE:
-            self.bait_bot_wait(self, 3, STATE.BAIT)
+            self.bait_bot_wait(self, STATE.BAIT)
         elif self.curr_state == STATE.BAIT:
-            self.bait()
+            self.bait_bot_bait(self, STATE.JAIL)
         elif self.curr_state == STATE.JAIL:
-            self.jailedf()
+            self.general_bot_jailed(self, STATE.HOME)
         elif self.curr_state == STATE.HOME:
-            self.gohome()
+            self.general_bot_return(self, STATE.WAIT)
         else:
             self.curr_state = STATE.WAIT
     
@@ -46,7 +46,7 @@ class Red3(RedBot):
             wait_state (STATE): state for waiting until all bots are ready.
         """
         
-        bot, distance = self.closest_enemy_to_flag()
+        bot, distance = Globals.red_bots[2].closest_enemy_to_flag()
         # Stay and or move close to the top border
         if self.x <= bait_position_x - 6 or self.x >= bait_position_x + 6:
             self.turn_towards(bait_position_x, bait_position_y, Globals.FAST)
@@ -60,53 +60,95 @@ class Red3(RedBot):
             # * self.curr_state = STATE.FLAG
 
     @staticmethod
-    def bait_bot_wait(self: RedBot, bot: int, bait_state: STATE):
+    def bait_bot_wait(self: RedBot, bait_state: STATE):
         """Bait Bot Waiting State
         
         This is the state where the bots wait in until they are ready to go attack.
 
         Args:
-            bot (int): the number that the bot is so the others know who is ready
+            self (RedBot): the bot that is calling this.
             bait_state (STATE): the state for attacking.
         """
-        if bot == 3:
+        if self == Globals.red_bots[2]:
              Globals.red_bots[0].bot3ready = True
-        elif bot == 4:
+        elif self == Globals.red_bots[3]:
             Globals.red_bots[0].bot4ready = True
-        elif bot == 5:
+        elif self == Globals.red_bots[4]:
             Globals.red_bots[0].bot5ready = True
 
         if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot4ready and Globals.red_bots[0].bot5ready:
             self.curr_state = bait_state
+    
+    @staticmethod
+    def bait_bot_bait(self: RedBot, jail_state):
+        """Bait Bot Bait State
 
-    def bait(self):
+        Args:
+            self (RedBot): the bot that is calling the function.
+            jail_state (_type_): the state to change to once jailed.
+        """
         bot, distance = Globals.red_bots[2].closest_enemy_to_self(True)
-        angle = abs(self.angleRelative(bot.x, bot.y))
+        angle = abs(Globals.red_bots[2].angleRelative(bot.x, bot.y))
         if self.x >= 1100 and self.y >= 600:
-            self.curr_state = STATE.JAIL
+            self.curr_state = jail_state
         # ? move across border, evading enemies
         elif angle < 60 and distance < 200 and not self.has_flag:
-            self.evadeBots()
+            Globals.red_bots[2].evadeBots()
         elif not self.has_flag:
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         elif self.has_flag:
-            i = self.angleRelative(Globals.red_bots[0].x, Globals.red_bots[0].y)
+            i = Globals.red_bots[2].angleRelative(Globals.red_bots[0].x, Globals.red_bots[0].y)
             if i < 0 or i > 40:
-                self.turn_towards(
-                    Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST
-                )
+                self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
             self.drive_forward(Globals.FAST)
 
-    def jailedf(self):
+    @staticmethod
+    def general_bot_jailed(self: RedBot, return_state: STATE):
+        """Jailed State 
+
+        Args:
+            self (RedBot): the bot calling the function
+            return_state (STATE): state to change to once out of jail.
+        """
         # todo - if jailbroken
-        Globals.red_bots[0].bot3ready = False
+        
+        if self == Globals.red_bots[2]:
+             Globals.red_bots[0].bot3ready = False
+        elif self == Globals.red_bots[3]:
+            Globals.red_bots[0].bot4ready = False
+        elif self == Globals.red_bots[4]:
+            Globals.red_bots[0].bot5ready = False
+
         if not self.jailed:
             self.curr_state = STATE.HOME
+    
+    @staticmethod
+    def general_bot_return(self: RedBot, next_state):
+        """Jailed State 
 
-    def gohome(self):
+        Args:
+            self (RedBot): the bot calling the function
+            next_state (STATE): state to change to immediately.
+        """
         # todo - move to upper position
         self.curr_state = STATE.WAIT
+
+    @staticmethod
+    def general_bot_attack(self: RedBot, return_state: STATE, dist = 250):
+        """General Attack State 
+
+        Args:
+            self (RedBot): the bot calling the function
+            next_state (STATE): state to change to immediately.
+            dist (int, default: 250): maximum distance to target them
+        """
+        bot, distance = Globals.red_bots[2].closest_enemy_to_flag()
+        if distance < dist:
+            self.turn_towards(bot.x, bot.y, Globals.FAST)
+            self.drive_forward(Globals.FAST)
+        else:
+            self.curr_state = return_state
 
     """
     Helper Functions
@@ -128,14 +170,6 @@ class Red3(RedBot):
         pointX = self.x - closest_bot.x
         pointY = self.y - closest_bot.y
         return pointX, pointY
-
-    def attack(self):
-        bot, distance = self.closest_enemy_to_flag()
-        if distance < 250:
-            self.turn_towards(bot.x, bot.y, Globals.FAST)
-            self.drive_forward(Globals.FAST)
-        else:
-            self.curr_state = STATE.WAIT
 
     def closest_enemy_to_flag(self):
         closest_bot = Globals.blue_bots[0]
