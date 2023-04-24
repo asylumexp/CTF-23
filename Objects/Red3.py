@@ -1,6 +1,11 @@
 from GameFrame import RedBot, Globals
 from enum import Enum
 
+""" 
+-3.2698548073713    SLOW = 2
+-6.2698548073713    MEDIUM = 5
+-9.54212546246344   FAST = 8
+"""
 
 class STATE(Enum):
     WAIT = 1
@@ -159,7 +164,7 @@ class Red3(RedBot):
     # * Evade bots
     def evadeBots(self):
         closest_enemy, dist = Globals.red_bots[2].closest_enemy_to_self(True)
-        if self.angleRelative(closest_enemy.x, closest_enemy.y) < 0:
+        if Globals.red_bots[2].angleRelative(closest_enemy.x, closest_enemy.y) < 0:
             self.turn_right(Globals.MEDIUM)
         else:
             self.turn_left(Globals.MEDIUM)

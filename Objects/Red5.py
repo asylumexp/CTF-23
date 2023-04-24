@@ -13,7 +13,7 @@ class STATE(Enum):
 class Red5(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
-        self.curr_state = STATE.MICHIGAN
+        self.curr_state = STATE.NORTH_CAROLINA
         self.set_image("Images/RED5.png", 25, 25)
 
     def tick(self):
