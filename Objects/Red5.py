@@ -26,7 +26,7 @@ class Red5(RedBot):
         elif self.curr_state == STATE.MICHIGAN:
             self.MICHIGAN()
         elif self.curr_state == STATE.BAIT_TRUE:
-            self.BAIT_TRUE()
+            Globals.red_bots[2].bait_bot_wait(self, STATE.BALTIMORE) # * Waiting for other bait bots
         elif self.curr_state == STATE.BALTIMORE:
             self.BALTIMORE()
         elif self.curr_state == STATE.JAIL:
@@ -54,12 +54,6 @@ class Red5(RedBot):
             self.drive_forward(Globals.FAST)
         if distance > 100:
             self.curr_state = STATE.MICHIGAN
-
-    # * Waiting for other bait bots
-    def BAIT_TRUE(self):
-        Globals.red_bots[0].bot5ready = True
-        if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot4ready:
-            self.curr_state = STATE.BALTIMORE
 
     #  * Checking for enemies
     def MICHIGAN(self):
