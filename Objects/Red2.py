@@ -62,8 +62,8 @@ class Red2(RedBot):
         if not bot_jailed:
             self.curr_state = STATE.RETURN
         else:
-            angle = self.angleRelative(Globals.SCREEN_WIDTH - 50, Globals.SCREEN_HEIGHT - 75)
-            self.turn_towards(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT - 75, Globals.FAST)
+            angle = self.angleRelative(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100)
+            self.turn_towards(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100, Globals.FAST)
             if angle < 120:
                 self.drive_forward(Globals.FAST)
 
@@ -71,12 +71,11 @@ class Red2(RedBot):
         # if self.x <= self.psuedoflagx-40 or self.x >= self.psuedoflagx-50:
         # self.turn_towards(self.psuedoflagx-40, Globals.blue_flag.y, Globals.FAST)
         # self.drive_forward(Globals.FAST)
-        if (self.point_to_point_distance(self.x, self.y, self.psuedoflagx, Globals.blue_flag.y) > 30):
-            i = self.angleRelative(self.psuedoflagx, Globals.blue_flag.y)
-            if i < 0 or i > 40:
-                self.turn_towards(self.psuedoflagx, Globals.blue_flag.y, Globals.FAST)
-            else:
-                self.drive_forward(Globals.FAST)
+        if (self.point_to_point_distance(self.x, self.y, self.psuedoflagx, Globals.blue_flag.y) > 40):
+            # i = self.angleRelative(self.psuedoflagx, Globals.blue_flag.y)
+            # if i < 0 or i > 40:
+            self.turn_towards(self.psuedoflagx, Globals.blue_flag.y, Globals.FAST)
+            self.drive_forward(Globals.FAST)
         else:
             self.curr_state = STATE.WAIT
 
