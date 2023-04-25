@@ -1,3 +1,6 @@
+import os
+
+
 class Globals:
     
     running = True
@@ -13,8 +16,8 @@ class Globals:
     red_team_name = "Team Uno"
     blue_team_name = "Team Two"
     # Team Logos to be displayed during match
-    red_team_logo = "TeamLogos\Team1.png"
-    blue_team_logo = "TeamLogos\Team2.png"
+    red_team_logo = os.path.join("teamLogos", "Team1.png")
+    blue_team_logo = os.path.join("teamLogos", "Team2.png")
 
     # Size of game screen
     SCREEN_WIDTH = 1280

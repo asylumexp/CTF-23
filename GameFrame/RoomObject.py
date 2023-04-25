@@ -29,10 +29,12 @@ class RoomObject:
         self.collision_object_types = set()
         self.collision_objects = []
 
-    def load_image(self, file_name):
+    @staticmethod
+    def load_image(file_name):
         return os.path.join('Images', file_name)
 
-    # Set the image and size of image of a room object, where height or width is not set / set at -1 it will be a ratio of the original
+    # Set the image and size of image of a room object,
+    # where height or width is not set / set at -1 it will be a ratio of the original
     def set_image(self, image, width = -1, height = -1):
         self.image_orig = pygame.image.load(image).convert_alpha()
         if width == -1 and height == -1:
@@ -227,7 +229,8 @@ class RoomObject:
         self.x += x
         self.y += y
 
-    def point_to_point_distance(self, x1, y1, x2, y2):
+    @staticmethod
+    def point_to_point_distance(x1, y1, x2, y2):
         x_dist = abs(x1 - x2)
         y_dist = abs(y1 - y2)
         return math.sqrt(x_dist * x_dist + y_dist * y_dist)

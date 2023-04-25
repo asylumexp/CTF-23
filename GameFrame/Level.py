@@ -101,7 +101,10 @@ class Level:
     def set_background_image(self, image_file):
         self.background_set = True
         self.background_image = pygame.image.load(os.path.join('Images', image_file)).convert_alpha()
-        self.background_image = pygame.transform.scale(self.background_image, (Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT))
+        self.background_image = pygame.transform.scale(
+            self.background_image,
+            (Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT)
+        )
 
     def set_background_scroll(self, speed):
         self.background_scrolling = True
@@ -132,11 +135,13 @@ class Level:
             for obj in self.objects:
                 self.init_collision_list(obj)
 
-    def load_sound(self, sound_file):
+    @staticmethod
+    def load_sound(sound_file):
         fq_filename = os.path.join('Sounds', sound_file)
         return pygame.mixer.Sound(fq_filename)
 
-    def load_image(self, file_name):
+    @staticmethod
+    def load_image(file_name):
         return os.path.join('Images', file_name)
 
     def init_collision_list(self, room_object):
