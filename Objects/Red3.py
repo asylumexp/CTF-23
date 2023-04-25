@@ -97,8 +97,8 @@ class Red3(RedBot):
             self (RedBot): the bot that is calling the function.
             jail_state (_type_): the state to change to once jailed.
         """
-        bot, distance = Globals.red_bots[2].closest_enemy_to_self(True)
-        angle = abs(Globals.red_bots[2].angleRelative(bot.x, bot.y))
+        bot, distance = Globals.red_bots[2].closest_enemy_to_self(self, True)
+        angle = abs(Globals.red_bots[2].angleRelative(self, bot.x, bot.y))
         if self.x >= 1100 and self.y >= 600:
             self.curr_state = jail_state
         # ? move across border, evading enemies
@@ -108,9 +108,10 @@ class Red3(RedBot):
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         elif self.has_flag:
-            i = Globals.red_bots[2].angleRelative(Globals.red_bots[0].x, Globals.red_bots[0].y)
-            if i < 0 or i > 40:
-                self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.FAST)
+            i = Globals.red_bots[2].angleRelative(self, Globals.red_bots[0].x, Globals.red_bots[0].y)
+            print(i)
+            if i < 0 or i > 45:
+                self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.SLOW)
             self.drive_forward(Globals.FAST)
 
     @staticmethod
@@ -155,7 +156,7 @@ class Red3(RedBot):
         """
         # * Check for bot
         bot, distance = Globals.red_bots[2].closest_enemy_to_bot()
-        angle = Globals.red_bots[2].angleRelative(bot.x, bot.y)
+        angle = Globals.red_bots[2].angleRelative(self, bot.x, bot.y)
         self.turn_towards(bot.x, bot.y, Globals.SLOW)
         if distance < 250 and angle < 70:
             self.drive_forward(Globals.FAST)
@@ -170,10 +171,10 @@ class Red3(RedBot):
     @staticmethod
     def evadeBots(self: RedBot):
         
-        closest_enemy, dist = Globals.red_bots[2].closest_enemy_to_self(True)
+        closest_enemy, dist = Globals.red_bots[2].closest_enemy_to_self(self, True)
         if self == Globals.red_bots[3]:
             print(closest_enemy, dist)
-        if Globals.red_bots[2].angleRelative(closest_enemy.x, closest_enemy.y) < 0:
+        if Globals.red_bots[2].angleRelative(self, closest_enemy.x, closest_enemy.y) < 0:
             self.turn_right(Globals.MEDIUM)
         else:
             self.turn_left(Globals.MEDIUM)
@@ -182,7 +183,7 @@ class Red3(RedBot):
 
     # * Get opposite direction from self, from winner 2020 code
     def oppositeDirection(self):
-        closest_bot, dist = Globals.red_bots[2].closest_enemy_to_self(True)
+        closest_bot, dist = Globals.red_bots[2].closest_enemy_to_self(self, True)
         pointX = self.x - closest_bot.x
         pointY = self.y - closest_bot.y
         return pointX, pointY
@@ -202,8 +203,9 @@ class Red3(RedBot):
                 closest_bot = curr_bot
 
         return closest_bot, shortest_distance
-
-    def closest_enemy_to_self(self, ignore):
+    
+    @staticmethod
+    def closest_enemy_to_self(self: RedBot, ignore):
         # todo - make more efficient
         closest_bot = Globals.blue_bots[0]
         closer_bot = Globals.red_bots[0]
@@ -236,10 +238,11 @@ class Red3(RedBot):
         else:
             self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
-
-    def angleRelative(self, x, y):
+    
+    @staticmethod
+    def angleRelative(self: RedBot, x, y):
         LEFT = False
-        angle = self.NormalizedAngle(x, y)
+        angle = Globals.red_bots[2].NormalizedAngle(self, x, y)
         if self.angle - angle < 0:
             LEFT = True
         diffangle = min(abs(self.angle - angle), 360 - abs(self.angle - angle))
@@ -247,7 +250,8 @@ class Red3(RedBot):
             diffangle *= -1
         return diffangle
 
-    def NormalizedAngle(self, x, y):
+    @staticmethod
+    def NormalizedAngle(self: RedBot, x, y):
         angle = self.get_rotation_to_coordinate(x, y)
         if angle < 0:
             angle += 360
