@@ -14,7 +14,10 @@ class Red5(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
         self.curr_state = STATE.NORTH_CAROLINA
-        self.set_image("Images/RED5.png", 25, 25)
+        try:
+            self.set_image("Images/RED5.png", 25, 25)
+        except FileNotFoundError:
+            print("hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red5 which is awkward gotta say so bye have fun doing the competition.")
 
     def tick(self):
         # * States
@@ -31,28 +34,3 @@ class Red5(RedBot):
         else:
             self.curr_state = STATE.NORTH_CAROLINA
 
-    # *evade function
-    #not me not so subtley using the frame stacking bug
-    def evadeBots(self):
-        closest_enemy, dist = self.closest_enemy_to_self(True)
-        angle = self.angleRelative(closest_enemy.x, closest_enemy.y)
-        if angle < 0:
-            self.turn_right(Globals.FAST)
-            self.turn_right(Globals.MEDIUM)
-            self.turn_right(Globals.SLOW)
-            self.drive_forward(Globals.FAST)
-            self.drive_forward(Globals.FAST)
-            self.drive_forward(Globals.FAST)
-        else:
-            self.turn_left(Globals.FAST)
-            self.turn_left(Globals.MEDIUM)
-            self.turn_left(Globals.SLOW)
-            self.drive_forward(Globals.FAST)
-            self.drive_forward(Globals.FAST)
-            self.drive_forward(Globals.FAST)
-        # Driving forward
-        self.drive_forward(Globals.FAST)
-
-    def EnemySpeedCheck(self):
-        pass
-        #goal is to check the closest enemy bots speed and so if its fast you'd turn and move slow so hopefully they move past you, and if they're medium or slow you move and turn fast, i just forgot how to check this, i was thinking something like "print blue bot speed, this blue bot speed = bspeed, if bspeed = Globals.SLOW: self speed would be yk fast. obv turning speed and movement speed oulwd be diifernet, so like. "blue turning speed = btspeed = Globals.SLOW" hopefully u undersatnd. 

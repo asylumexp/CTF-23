@@ -18,7 +18,11 @@ class Red1(RedBot):
         self.bot3ready = False
         self.bot4ready = False
         self.bot5ready = False
-        self.set_image("Images/r1.png", 25, 25)
+        try:
+            self.set_image("Images/r1.png", 25, 25)
+        except FileNotFoundError:
+            print("hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red1 which is awkward gotta say so bye have fun doing the competition.")
+
 
     def tick(self):
         if self.curr_state == STATE.FLAGRETURN:

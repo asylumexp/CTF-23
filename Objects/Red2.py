@@ -13,7 +13,11 @@ class Red2(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
         self.curr_state = STATE.RETURN
-        self.set_image("Images/r2.png", 25, 25)
+        try:
+            self.set_image("Images/r2.png", 25, 25)
+        except FileNotFoundError:
+            print("hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red2 which is awkward gotta say so bye have fun doing the competition.")
+
 
     def tick(self):
         # Lame declaring outside init becuz of weird glitch with gameframe
