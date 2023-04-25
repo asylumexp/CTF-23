@@ -109,7 +109,6 @@ class Red3(RedBot):
             self.drive_forward(Globals.FAST)
         elif self.has_flag:
             i = Globals.red_bots[2].angleRelative(self, Globals.red_bots[0].x, Globals.red_bots[0].y)
-            print(i)
             if i < 0 or i > 45:
                 self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.SLOW)
             self.drive_forward(Globals.FAST)
@@ -130,7 +129,6 @@ class Red3(RedBot):
             Globals.red_bots[0].bot4ready = False
         elif self == Globals.red_bots[4]:
             Globals.red_bots[0].bot5ready = False
-
         if not self.jailed:
             self.curr_state = STATE.HOME
     
@@ -172,8 +170,6 @@ class Red3(RedBot):
     def evadeBots(self: RedBot):
         
         closest_enemy, dist = Globals.red_bots[2].closest_enemy_to_self(self, True)
-        if self == Globals.red_bots[3]:
-            print(closest_enemy, dist)
         if Globals.red_bots[2].angleRelative(self, closest_enemy.x, closest_enemy.y) < 0:
             self.turn_right(Globals.MEDIUM)
         else:
