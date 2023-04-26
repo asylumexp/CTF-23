@@ -29,7 +29,7 @@ class Red3(RedBot):
 
     def tick(self):
         if self.curr_state == STATE.WAIT:
-            self.bait_bot_prepare(self, 650, 600, STATE.PREPARE)
+            self.bait_bot_prepare(self, 650, 75, STATE.PREPARE)
         elif self.curr_state == STATE.ATTACK:
             self.general_bot_attack(self, STATE.WAIT)
         elif self.curr_state == STATE.PREPARE:
