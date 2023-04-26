@@ -17,14 +17,12 @@ class Red5(RedBot):
         try:
             self.set_image("Images/RED5.png", 25, 25)
         except FileNotFoundError:
-            print(
-                "hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red5 which is awkward gotta say so bye have fun doing the competition.(the image was me with my face covered in shaving cream UwU)"
-                )
+            print("hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red5 which is awkward gotta say so bye have fun doing the competition.")
 
     def tick(self):
         # * States
         if self.curr_state == STATE.NORTH_CAROLINA:
-            Globals.red_bots[2].bait_bot_prepare(self, 650, 600, STATE.BAIT_TRUE)
+            Globals.red_bots[2].bait_bot_prepare(self, 650, 75, STATE.BAIT_TRUE)
         elif self.curr_state == STATE.MISSOURI:
             Globals.red_bots[2].general_bot_attack(self, STATE.NORTH_CAROLINA)
         elif self.curr_state == STATE.BAIT_TRUE:
