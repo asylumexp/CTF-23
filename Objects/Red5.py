@@ -33,4 +33,3 @@ class Red5(RedBot):
             Globals.red_bots[2].general_bot_jailed(self, STATE.MISSOURI)
         else:
             self.curr_state = STATE.NORTH_CAROLINA
-

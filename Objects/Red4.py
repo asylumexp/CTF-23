@@ -18,7 +18,6 @@ class Red4(RedBot):
         except FileNotFoundError:
             print("hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red4 which is awkward gotta say so bye have fun doing the competition.")
 
-
     def tick(self):
         if self.curr_state == STATE.WAIT:
             Globals.red_bots[2].bait_bot_prepare(self, 650, 250, STATE.PREPARE)
