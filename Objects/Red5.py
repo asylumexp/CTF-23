@@ -33,3 +33,63 @@ class Red5(RedBot):
             Globals.red_bots[2].general_bot_jailed(self, STATE.MISSOURI)
         else:
             self.curr_state = STATE.NORTH_CAROLINA
+
+#Priority List for changing priority of states
+class Priority_List(object):
+    def __init__(self):
+        self.queue = []
+
+    def __str__(self):
+        return "".join([str(queue) for queue in self.queues])
+    
+    #Checking if list is empty
+    def isEmpty(self):
+        return len(self.queues) == 0
+    
+    #inserting states into list
+    def insert(self, State):
+        self.queue.append(State)
+
+    #Setting the priority of the state
+    def delete(self):
+        try:
+            max_val = 0
+            for i in range(len(self.queues)):
+                if self.queues[i] > self.queue[max_val]:
+                    max_val = i
+            item = self.queue[max_val]
+            del self.queue[max_val]
+            return item
+        except IndexError:
+            print("error")
+            exit()
+
+if __name__ == "__main__":
+    MISSOURI = 2
+    NORTH_CAROLINA = 3
+    BALTIMORE = 4
+    BAIT_TRUE = 5
+    JAILBREAK = 1
+    if Globals.red_bots[3].x >= 1100 and Globals.red_bots[3].y >= 600:
+        JAILBREAK =+ 1
+        
+    PriorityQueue = Priority_List()
+    PriorityQueue.insert(MISSOURI)
+    PriorityQueue.insert(NORTH_CAROLINA)
+    PriorityQueue.insert(BALTIMORE)
+    PriorityQueue.insert(BAIT_TRUE)
+    print(PriorityQueue)
+
+    def Priority_State_Change(self):
+        if PriorityQueue[0] == MISSOURI:
+            Globals.red_bots[2].general_bot_attack(self, STATE.NORTH_CAROLINA)
+        if PriorityQueue[0] == NORTH_CAROLINA:
+            Globals.red_bots[2].bait_bot_prepare(self, 650, 75, STATE.BAIT_TRUE)
+        if PriorityQueue[0] == BALTIMORE:
+            Globals.red_bots[2].bait_bot_bait(self, STATE.JAIL)
+        if PriorityQueue[0] == BAIT_TRUE:
+            Globals.red_bots[2].bait_bot_wait(self, STATE.BALTIMORE)
+        while not PriorityQueue.isEmpty():
+            print(PriorityQueue.delete())
+
+
