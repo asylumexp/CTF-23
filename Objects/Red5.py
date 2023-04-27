@@ -41,22 +41,22 @@ class Priority_List(object):
         self.queue = []
 
     def __str__(self):
-        return "".join([str(queue) for queue in self.queues])
+        return "".join([str(queue) for queue in self.queue])
     
     #Checking if list is empty
     def isEmpty(self):
-        return len(self.queues) == 0
+        return len(self.queue) == 0
     
     #inserting states into list
     def insert(self, State):
         self.queue.append(State)
 
-    #Setting the priority of the state
-    def delete(self):
+    #Setting the priority of the state #IT COMPARES THE VALUES IN THE LIST SAM
+    def num_comp (self):
         try:
             max_val = 0
-            for i in range(len(self.queues)):
-                if self.queues[i] > self.queue[max_val]:
+            for i in range(len(self.queue)):
+                if self.queue[i] > self.queue[max_val]:
                     max_val = i
             item = self.queue[max_val]
             del self.queue[max_val]
@@ -94,6 +94,6 @@ if __name__ == "__main__":
             Globals.red_bots[2].jailbreak(self, STATE.JAILBREAK)
 
         while not PriorityQueue.isEmpty():
-            print(PriorityQueue.delete())
+            print(PriorityQueue.num_comp())
 
 
