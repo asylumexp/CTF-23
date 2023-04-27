@@ -8,6 +8,7 @@ class STATE(Enum):
     BALTIMORE = 3  # * Bait state
     BAIT_TRUE = 4  # * Prepare bait state
     JAIL = 5  # * Jail state
+    JAILBREAK = 6 # * Jail Break state
 
 
 class Red5(RedBot):
@@ -71,7 +72,7 @@ if __name__ == "__main__":
     BAIT_TRUE = 5
     JAILBREAK = 1
     if Globals.red_bots[3].x >= 1100 and Globals.red_bots[3].y >= 600:
-        JAILBREAK =+ 1
+        JAILBREAK =+ 5
         
     PriorityQueue = Priority_List()
     PriorityQueue.insert(MISSOURI)
@@ -89,6 +90,9 @@ if __name__ == "__main__":
             Globals.red_bots[2].bait_bot_bait(self, STATE.JAIL)
         if PriorityQueue[0] == BAIT_TRUE:
             Globals.red_bots[2].bait_bot_wait(self, STATE.BALTIMORE)
+        if PriorityQueue[0] == JAILBREAK:
+            Globals.red_bots[2].jailbreak(self, STATE.JAILBREAK)
+
         while not PriorityQueue.isEmpty():
             print(PriorityQueue.delete())
 

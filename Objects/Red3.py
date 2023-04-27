@@ -92,7 +92,21 @@ class Red3(RedBot):
 
         if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot4ready and Globals.red_bots[0].bot5ready:
             self.curr_state = bait_state
-    
+    @staticmethod
+    def jailbreak(self):
+        bot_jailed = False
+        for team_bot in Globals.red_bots:
+            if team_bot.jailed:
+                bot_jailed = True
+                break
+        if not bot_jailed:
+            self.curr_state = STATE.RETURN
+        else:
+            angle = self.angleRelative(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100)
+            self.turn_towards(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100, Globals.FAST)
+            if angle < 120:
+                self.drive_forward(Globals.FAST)
+
     @staticmethod
     def bait_bot_bait(self: RedBot, jail_state):
         """Bait Bot Bait State
