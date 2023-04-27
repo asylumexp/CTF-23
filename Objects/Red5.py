@@ -8,13 +8,15 @@ class STATE(Enum):
     BALTIMORE = 3  # * Bait state
     BAIT_TRUE = 4  # * Prepare bait state
     JAIL = 5  # * Jail state
-    JAILBREAK = 6 # * Jail Break state
+    JAILBREAK = 6  # * Jail Break state
 
 
 class Red5(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
         self.curr_state = STATE.NORTH_CAROLINA
+        self.priority = Priority_List(
+            [STATE.MISSOURI, STATE.NORTH_CAROLINA, STATE.BALTIMORE, STATE.BAIT_TRUE, STATE.JAIL, STATE.JAILBREAK], [2, 3, 4, 5, 1])
         try:
             self.set_image("Images/RED5.png", 25, 25)
         except FileNotFoundError:
@@ -22,78 +24,52 @@ class Red5(RedBot):
 
     def tick(self):
         # * States
-        if self.curr_state == STATE.NORTH_CAROLINA:
-            Globals.red_bots[2].bait_bot_prepare(self, 650, 75, STATE.BAIT_TRUE)
-        elif self.curr_state == STATE.MISSOURI:
-            Globals.red_bots[2].general_bot_attack(self, STATE.NORTH_CAROLINA)
-        elif self.curr_state == STATE.BAIT_TRUE:
-            Globals.red_bots[2].bait_bot_wait(self, STATE.BALTIMORE)
-        elif self.curr_state == STATE.BALTIMORE:
-            Globals.red_bots[2].bait_bot_bait(self, STATE.JAIL)
-        elif self.curr_state == STATE.JAIL:
-            Globals.red_bots[2].general_bot_jailed(self, STATE.MISSOURI)
-        else:
-            self.curr_state = STATE.NORTH_CAROLINA
-
-#Priority List for changing priority of states
-class Priority_List(object):
-    def __init__(self):
-        self.queue = []
-
-    def __str__(self):
-        return "".join([str(queue) for queue in self.queue])
-    
-    #Checking if list is empty
-    def isEmpty(self):
-        return len(self.queue) == 0
-    
-    #inserting states into list
-    def insert(self, State):
-        self.queue.append(State)
-
-    #Setting the priority of the state #IT COMPARES THE VALUES IN THE LIST SAM
-    def num_comp (self):
         try:
-            max_val = 0
-            for i in range(len(self.queue)):
-                if self.queue[i] > self.queue[max_val]:
-                    max_val = i
-            item = self.queue[max_val]
-            del self.queue[max_val]
-            return item
-        except IndexError:
-            print("error")
-            exit()
-
-if __name__ == "__main__":
-    MISSOURI = 2
-    NORTH_CAROLINA = 3
-    BALTIMORE = 4
-    BAIT_TRUE = 5
-    JAILBREAK = 1
-    if Globals.red_bots[3].x >= 1100 and Globals.red_bots[3].y >= 600:
-        JAILBREAK =+ 5
-        
-    PriorityQueue = Priority_List()
-    PriorityQueue.insert(MISSOURI)
-    PriorityQueue.insert(NORTH_CAROLINA)
-    PriorityQueue.insert(BALTIMORE)
-    PriorityQueue.insert(BAIT_TRUE)
-    print(PriorityQueue)
-
-    def Priority_State_Change(self):
-        if PriorityQueue[0] == MISSOURI:
-            Globals.red_bots[2].general_bot_attack(self, STATE.NORTH_CAROLINA)
-        if PriorityQueue[0] == NORTH_CAROLINA:
-            Globals.red_bots[2].bait_bot_prepare(self, 650, 75, STATE.BAIT_TRUE)
-        if PriorityQueue[0] == BALTIMORE:
-            Globals.red_bots[2].bait_bot_bait(self, STATE.JAIL)
-        if PriorityQueue[0] == BAIT_TRUE:
-            Globals.red_bots[2].bait_bot_wait(self, STATE.BALTIMORE)
-        if PriorityQueue[0] == JAILBREAK:
-            Globals.red_bots[2].jailbreak(self, STATE.JAILBREAK)
-
-        while not PriorityQueue.isEmpty():
-            print(PriorityQueue.num_comp())
+            val, state = self.priority.highestValue()
+            if val != -1 or val != False:
+                self.curr_state = state
+        finally:
+            if self.curr_state == STATE.NORTH_CAROLINA:
+                Globals.red_bots[2].bait_bot_prepare(
+                    self, 650, 75, STATE.BAIT_TRUE)
+            elif self.curr_state == STATE.MISSOURI:
+                Globals.red_bots[2].general_bot_attack(
+                    self, STATE.NORTH_CAROLINA)
+            elif self.curr_state == STATE.BAIT_TRUE:
+                Globals.red_bots[2].bait_bot_wait(self, STATE.BALTIMORE)
+            elif self.curr_state == STATE.BALTIMORE:
+                Globals.red_bots[2].bait_bot_bait(self, STATE.JAIL)
+            elif self.curr_state == STATE.JAIL:
+                Globals.red_bots[2].general_bot_jailed(self, STATE.MISSOURI)
+            else:
+                self.curr_state = STATE.NORTH_CAROLINA
 
 
+class Priority_List(object):
+    def __init__(self, listOfStates: list, listOfTheirValues: list):
+        self.queue = {}
+        for i in range(listOfStates):
+            self.queue[listOfStates[i]] = listOfTheirValues[i]
+
+    def __str__(self):  # ? No idea what this does
+        return "".join([str(queue) for queue in self.queue])
+
+    # * Checking if list is empty
+    def isEmpty(self):
+        return False if not self.queue else True
+
+    # * Find the highest value state
+    def highestValue(self):
+        try:
+            highestNum = -1
+            highestState = STATE
+            for key in self.queue:
+                if self.queue[key] > highestNum:
+                    highestNum = self.queue[key]
+            return highestNum, highestState  # ! Bad if it equals -1
+        except Exception:  # ! Fix so that its using the specific error
+            return False, STATE
+
+    # inserting states into list
+    def insert(self, State: STATE, priority=0):
+        self.queue[State] = priority
