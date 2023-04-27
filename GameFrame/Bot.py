@@ -1,5 +1,6 @@
 from GameFrame import Globals, RoomObject
 import GameFrame.Flag
+import traceback
 
 
 class Bot(RoomObject):
@@ -28,6 +29,7 @@ class Bot(RoomObject):
             self.set_flag_position = self.set_flag_position_blue
             self.get_flag = self.get_flag_blue
             self.set_local_flag_height = self.set_local_flag_height_blue
+            self.add_points_close_to_flag = self.add_points_close_to_flag_blue
         else:
             self.FLAG_TO_STEAL_WINNER = Globals.RED_FLAG_WINNER
             self.START_DIRECTION = 90
@@ -41,6 +43,7 @@ class Bot(RoomObject):
             self.set_flag_position = self.set_flag_position_red
             self.get_flag = self.get_flag_red
             self.set_local_flag_height = self.set_local_flag_height_red
+            self.add_points_close_to_flag = self.add_points_close_to_flag_red
 
         bot_image = self.load_image(self.IMAGE)
         self.set_image(bot_image, 25, 25)
@@ -59,7 +62,6 @@ class Bot(RoomObject):
         self.register_collision_object("Blue4")
         self.register_collision_object("Blue5")
         self.register_collision_object(self.FLAG_NAME)
-
 
     def step(self):
         if not self.jailed:
@@ -170,7 +172,7 @@ class Bot(RoomObject):
         try:
             self.tick()
         except Exception:
-            print(self.COLOUR_STRING + " Exception occurred\n")
+            print(traceback.format_exc())
 
     def tick(self):
         pass
@@ -230,8 +232,10 @@ class Bot(RoomObject):
         self.FLAG_HEIGHT = Globals.red_flag.rect.height
 
     # Helper method to add to the global scores of each team
-    def add_points_close_to_flag(self, points):
-        if self.COLOUR == Globals.BLUE_COLOUR:
-            Globals.blue_enemy_side_time += points
-        else:
-            Globals.red_enemy_side_time += points
+    @staticmethod
+    def add_points_close_to_flag_blue(points):
+        Globals.blue_enemy_side_time += points
+
+    @staticmethod
+    def add_points_close_to_flag_red(points):
+        Globals.red_enemy_side_time += points
