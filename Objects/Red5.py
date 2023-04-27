@@ -51,9 +51,6 @@ class Priority_List(object):
         for i in range(listOfStates):
             self.queue[listOfStates[i]] = listOfTheirValues[i]
 
-    def __str__(self):  # ? No idea what this does
-        return "".join([str(queue) for queue in self.queue])
-
     # * Checking if list is empty
     def isEmpty(self):
         return False if not self.queue else True
@@ -66,7 +63,7 @@ class Priority_List(object):
             for key in self.queue:
                 if self.queue[key] > highestNum:
                     highestNum = self.queue[key]
-            return highestNum, highestState  # ! Bad if it equals -1
+            return highestNum, highestState 
         except Exception:  # ! Fix so that its using the specific error
             return False, STATE
 
