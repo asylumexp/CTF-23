@@ -20,9 +20,9 @@ class Bot(RoomObject):
             self.START_DIRECTION = -90
             self.MY_TEAM_BOTS = Globals.blue_bots
             self.JAIL_POSITION = (Globals.GAME_AREA_WIDTH_MIN + 25, Globals.GAME_AREA_HEIGHT_MIN + 25)
-            self.IMAGE = 'bot_blue.png'
-            self.FLAG_NAME = 'BlueFlag'
-            self.COLOUR_STRING = 'Blue'
+            self.IMAGE = "bot_blue.png"
+            self.FLAG_NAME = "BlueFlag"
+            self.COLOUR_STRING = "Blue"
             self.COLOUR = Globals.BLUE_COLOUR
             self.on_enemy_side = self.on_enemy_side_blue
             self.set_flag_position = self.set_flag_position_blue
@@ -33,9 +33,9 @@ class Bot(RoomObject):
             self.START_DIRECTION = 90
             self.MY_TEAM_BOTS = Globals.red_bots
             self.JAIL_POSITION = (Globals.GAME_AREA_WIDTH_MAX - 25, Globals.GAME_AREA_HEIGHT_MAX - 25)
-            self.IMAGE = 'bot_red.png'
-            self.FLAG_NAME = 'RedFlag'
-            self.COLOUR_STRING = 'Red'
+            self.IMAGE = "bot_red.png"
+            self.FLAG_NAME = "RedFlag"
+            self.COLOUR_STRING = "Red"
             self.COLOUR = Globals.RED_COLOUR
             self.on_enemy_side = self.on_enemy_side_red
             self.set_flag_position = self.set_flag_position_red
@@ -48,19 +48,18 @@ class Bot(RoomObject):
         self.rotate(self.START_DIRECTION)
         self.FLAG_HEIGHT = 0
 
-        self.register_collision_object('Red1')
-        self.register_collision_object('Red2')
-        self.register_collision_object('Red3')
-        self.register_collision_object('Red4')
-        self.register_collision_object('Red5')
-        self.register_collision_object('Blue1')
-        self.register_collision_object('Blue2')
-        self.register_collision_object('Blue3')
-        self.register_collision_object('Blue4')
-        self.register_collision_object('Blue5')
+        self.register_collision_object("Red1")
+        self.register_collision_object("Red2")
+        self.register_collision_object("Red3")
+        self.register_collision_object("Red4")
+        self.register_collision_object("Red5")
+        self.register_collision_object("Blue1")
+        self.register_collision_object("Blue2")
+        self.register_collision_object("Blue3")
+        self.register_collision_object("Blue4")
+        self.register_collision_object("Blue5")
         self.register_collision_object(self.FLAG_NAME)
 
-        self.enemy_side_time = 0
 
     def step(self):
         if not self.jailed:
@@ -96,7 +95,6 @@ class Bot(RoomObject):
             self.rotate(-3)
 
     def turn_towards(self, x, y, speed=Globals.SLOW):
-
         target_angle = int(self.get_rotation_to_coordinate(x, y))
 
         if target_angle < 0:
@@ -133,7 +131,7 @@ class Bot(RoomObject):
                 self.set_local_flag_height()
             if self.on_enemy_side(Globals.SCREEN_WIDTH / 4):
                 # keep the flag behind self
-                flag_buffer = (self.get_flag().rect.width + 2)
+                flag_buffer = self.get_flag().rect.width + 2
                 flag_x = self.x + flag_buffer if self.COLOUR == Globals.BLUE_COLOUR else self.x - flag_buffer
                 flag_y = self.y
 
@@ -155,10 +153,7 @@ class Bot(RoomObject):
 
         if self.on_enemy_side():
             add_points = 1
-            distance = self.point_to_point_distance(
-                self.x, self.y,
-                Globals.blue_flag.x, Globals.blue_flag.y
-            )
+            distance = self.point_to_point_distance(self.x, self.y, Globals.blue_flag.x, Globals.blue_flag.y)
             if self.has_flag:
                 add_points += 50
             elif distance < 50:
@@ -236,4 +231,7 @@ class Bot(RoomObject):
 
     # Helper method to add to the global scores of each team
     def add_points_close_to_flag(self, points):
-        self.enemy_side_time += points
+        if self.COLOUR == Globals.BLUE_COLOUR:
+            Globals.blue_enemy_side_time += points
+        else:
+            Globals.red_enemy_side_time += points
