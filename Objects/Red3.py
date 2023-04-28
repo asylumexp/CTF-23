@@ -9,18 +9,17 @@ from Objects.Red5 import Priority_List
 
 
 class STATE(Enum):
-    WAIT = 1
+    BAIT_PREPARE = 1
     ATTACK = 2
-    PREPARE = 4
-    BAIT = 5
-    JAIL = 6
-    HOME = 7
+    BAIT_WAIT = 3
+    BAIT_BAIT = 4
+    JAIL = 5
 
 
 class Red3(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
-        self.curr_state = STATE.WAIT
+        self.curr_state = STATE.BAIT_PREPARE
         self.prev_x_enemy = 0
         try:
             self.set_image("Images/r3.png", 25, 25)
@@ -28,20 +27,18 @@ class Red3(RedBot):
             print("hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red3 which is awkward gotta say so bye have fun doing the competition.")
 
     def tick(self):
-        if self.curr_state == STATE.WAIT:
-            self.bait_bot_prepare(self, 650, 600, STATE.PREPARE)
+        if self.curr_state == STATE.BAIT_PREPARE:
+            self.bait_bot_prepare(self, 650, 600, STATE.BAIT_WAIT)
         elif self.curr_state == STATE.ATTACK:
-            self.general_bot_attack(self, STATE.WAIT)
-        elif self.curr_state == STATE.PREPARE:
-            self.bait_bot_wait(self, STATE.BAIT)
-        elif self.curr_state == STATE.BAIT:
+            self.general_bot_attack(self, STATE.BAIT_PREPARE)
+        elif self.curr_state == STATE.BAIT_WAIT:
+            self.bait_bot_wait(self, STATE.BAIT_BAIT)
+        elif self.curr_state == STATE.BAIT_BAIT:
             self.bait_bot_bait(self, STATE.JAIL)
         elif self.curr_state == STATE.JAIL:
-            self.general_bot_jailed(self, STATE.HOME)
-        elif self.curr_state == STATE.HOME:
-            self.general_bot_return(self, STATE.WAIT)
+            self.general_bot_jailed(self, STATE.BAIT_PREPARE)
         else:
-            self.curr_state = STATE.WAIT
+            self.curr_state = STATE.BAIT_PREPARE
 
     @staticmethod
     def bait_bot_prepare(self: RedBot, bait_position_x: int, bait_position_y: int, wait_state: STATE):
