@@ -1,6 +1,6 @@
 from GameFrame import RedBot, Globals
 from enum import Enum
-
+from Objects.Red5 import Priority_List
 """ 
 -3.2698548073713    SLOW = 2
 -6.2698548073713    MEDIUM = 5
