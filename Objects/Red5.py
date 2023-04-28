@@ -8,6 +8,7 @@ class STATE(Enum):
     BALTIMORE = 3  # * Bait state
     BAIT_TRUE = 4  # * Prepare bait state
     JAIL = 5  # * Jail state
+    JAILBREAK = 6 # * Jail Break State
 
 
 class Red5(RedBot):
@@ -33,3 +34,8 @@ class Red5(RedBot):
             Globals.red_bots[2].general_bot_jailed(self, STATE.MISSOURI)
         else:
             self.curr_state = STATE.NORTH_CAROLINA
+
+
+    def Coreys_Dumb_Bot(self):
+        if (Globals.red_bots[3].x >= 1100 and Globals.red_bots[3].y >= 600 ):
+            Globals.red_bots[2].jailbreak(self, STATE.JAILBREAK)

@@ -14,6 +14,7 @@ class STATE(Enum):
     BAIT = 5
     JAIL = 6
     HOME = 7
+    JAILBREAK = 8
 
 
 class Red3(RedBot):
@@ -40,6 +41,8 @@ class Red3(RedBot):
             self.general_bot_jailed(self, STATE.HOME)
         elif self.curr_state == STATE.HOME:
             self.general_bot_return(self, STATE.WAIT)
+        elif self.curr_state == STATE.JAILBREAK:
+            self.jailbreak(self, STATE.JAILBREAK)
         else:
             self.curr_state = STATE.WAIT
     
@@ -256,3 +259,18 @@ class Red3(RedBot):
         if angle < 0:
             angle += 360
         return angle
+    
+    @staticmethod
+    def jailbreak(self: RedBot):
+        bot_jailed = False
+        for team_bot in Globals.red_bots:
+            if team_bot.jailed:
+                bot_jailed = True
+                break
+        if not bot_jailed:
+            self.curr_state = STATE.RETURN
+        else:
+            angle = self.angleRelative(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100)
+            self.turn_towards(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100, Globals.FAST)
+            if angle < 120:
+                self.drive_forward(Globals.FAST)
