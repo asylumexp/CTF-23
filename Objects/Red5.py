@@ -16,7 +16,7 @@ class Red5(RedBot):
         RedBot.__init__(self, room, x, y)
         self.curr_state = STATE.NORTH_CAROLINA
         self.priority = Priority_List(
-            [STATE.MISSOURI, STATE.NORTH_CAROLINA, STATE.BALTIMORE, STATE.BAIT_TRUE, STATE.JAIL, STATE.JAILBREAK], [2, 3, 4, 5, 1])
+            [STATE.MISSOURI, STATE.NORTH_CAROLINA, STATE.BALTIMORE, STATE.BAIT_TRUE, STATE.JAILBREAK], [2, 3, 4, 5, 1])
         try:
             self.set_image("Images/RED5.png", 25, 25)
         except FileNotFoundError:
@@ -48,8 +48,11 @@ class Red5(RedBot):
 class Priority_List(object):
     def __init__(self, listOfStates: list, listOfTheirValues: list):
         self.queue = {}
-        for i in range(listOfStates):
-            self.queue[listOfStates[i]] = listOfTheirValues[i]
+        num = 0
+        for i in listOfStates:
+            print(num, i)
+            self.queue[i] = listOfTheirValues[num]
+            num += 1
 
     # * Checking if list is empty
     def isEmpty(self):
@@ -63,7 +66,8 @@ class Priority_List(object):
             for key in self.queue:
                 if self.queue[key] > highestNum:
                     highestNum = self.queue[key]
-            return highestNum, highestState 
+                    highestState = key
+            return highestNum, highestState  # ! Bad if it equals -1
         except Exception:  # ! Fix so that its using the specific error
             return False, STATE
 

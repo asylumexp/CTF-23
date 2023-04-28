@@ -7,6 +7,7 @@ from enum import Enum
 -9.54212546246344   FAST = 8
 """
 
+
 class STATE(Enum):
     WAIT = 1
     ATTACK = 2
@@ -26,7 +27,6 @@ class Red3(RedBot):
         except FileNotFoundError:
             print("hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red3 which is awkward gotta say so bye have fun doing the competition.")
 
-
     def tick(self):
         if self.curr_state == STATE.WAIT:
             self.bait_bot_prepare(self, 650, 600, STATE.PREPARE)
@@ -42,11 +42,11 @@ class Red3(RedBot):
             self.general_bot_return(self, STATE.WAIT)
         else:
             self.curr_state = STATE.WAIT
-    
+
     @staticmethod
     def bait_bot_prepare(self: RedBot, bait_position_x: int, bait_position_y: int, wait_state: STATE):
         """Prepare State for the Bait bots
-        
+
         This state moves the bot to the bait position and will in the future attack others
 
         Args:
@@ -54,7 +54,7 @@ class Red3(RedBot):
             bait_position_y (int): y pos for bait position.
             wait_state (STATE): state for waiting until all bots are ready.
         """
-        
+
         bot, distance = Globals.red_bots[2].closest_enemy_to_flag()
         # Stay and or move close to the top border
         if self.x <= bait_position_x - 6 or self.x >= bait_position_x + 6:
@@ -72,11 +72,11 @@ class Red3(RedBot):
     def general_stack_turn(self: RedBot, amount):
         for i in range(int(amount+125/3.2698548073713)):
             self.turn_right()
-    
+
     @staticmethod
     def bait_bot_wait(self: RedBot, bait_state: STATE):
         """Bait Bot Waiting State
-        
+
         This is the state where the bots wait in until they are ready to go attack.
 
         Args:
@@ -84,14 +84,16 @@ class Red3(RedBot):
             bait_state (STATE): the state for attacking.
         """
         if self == Globals.red_bots[2]:
-             Globals.red_bots[0].bot3ready = True
+            Globals.red_bots[0].bot3ready = True
         elif self == Globals.red_bots[3]:
             Globals.red_bots[0].bot4ready = True
         elif self == Globals.red_bots[4]:
             Globals.red_bots[0].bot5ready = True
+            print(True)
 
         if Globals.red_bots[0].bot3ready and Globals.red_bots[0].bot4ready and Globals.red_bots[0].bot5ready:
             self.curr_state = bait_state
+
     @staticmethod
     def jailbreak(self):
         bot_jailed = False
@@ -102,8 +104,10 @@ class Red3(RedBot):
         if not bot_jailed:
             self.curr_state = STATE.RETURN
         else:
-            angle = self.angleRelative(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100)
-            self.turn_towards(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100, Globals.FAST)
+            angle = self.angleRelative(
+                Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100)
+            self.turn_towards(Globals.SCREEN_WIDTH - 75,
+                              Globals.SCREEN_HEIGHT - 100, Globals.FAST)
             if angle < 120:
                 self.drive_forward(Globals.FAST)
 
@@ -123,12 +127,15 @@ class Red3(RedBot):
         elif angle < 60 and distance < 200 and not self.has_flag:
             Globals.red_bots[2].evadeBots(self)
         elif not self.has_flag:
-            self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
+            self.turn_towards(Globals.red_flag.x,
+                              Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         elif self.has_flag:
-            i = Globals.red_bots[2].angleRelative(self, Globals.red_bots[0].x, Globals.red_bots[0].y)
+            i = Globals.red_bots[2].angleRelative(
+                self, Globals.red_bots[0].x, Globals.red_bots[0].y)
             if i < 0 or i > 45:
-                self.turn_towards(Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.SLOW)
+                self.turn_towards(
+                    Globals.red_bots[0].x, Globals.red_bots[0].y, Globals.SLOW)
             self.drive_forward(Globals.FAST)
 
     @staticmethod
@@ -140,16 +147,16 @@ class Red3(RedBot):
             return_state (STATE): state to change to once out of jail.
         """
         # todo - if jailbroken
-        
+
         if self == Globals.red_bots[2]:
-             Globals.red_bots[0].bot3ready = False
+            Globals.red_bots[0].bot3ready = False
         elif self == Globals.red_bots[3]:
             Globals.red_bots[0].bot4ready = False
         elif self == Globals.red_bots[4]:
             Globals.red_bots[0].bot5ready = False
         if not self.jailed:
             self.curr_state = STATE.HOME
-    
+
     @staticmethod
     def general_bot_return(self: RedBot, next_state):
         """Jailed State 
@@ -162,7 +169,7 @@ class Red3(RedBot):
         self.curr_state = STATE.WAIT
 
     @staticmethod
-    def general_bot_attack(self: RedBot, return_state: STATE, dist = 250):
+    def general_bot_attack(self: RedBot, return_state: STATE, dist=250):
         """General Attack State 
 
         Args:
@@ -186,8 +193,9 @@ class Red3(RedBot):
     # * Evade bots\
     @staticmethod
     def evadeBots(self: RedBot):
-        
-        closest_enemy, dist = Globals.red_bots[2].closest_enemy_to_self(self, True)
+
+        closest_enemy, dist = Globals.red_bots[2].closest_enemy_to_self(
+            self, True)
         if Globals.red_bots[2].angleRelative(self, closest_enemy.x, closest_enemy.y) < 0:
             self.turn_right(Globals.MEDIUM)
         else:
@@ -197,7 +205,8 @@ class Red3(RedBot):
 
     # * Get opposite direction from self, from winner 2020 code
     def oppositeDirection(self):
-        closest_bot, dist = Globals.red_bots[2].closest_enemy_to_self(self, True)
+        closest_bot, dist = Globals.red_bots[2].closest_enemy_to_self(
+            self, True)
         pointX = self.x - closest_bot.x
         pointY = self.y - closest_bot.y
         return pointX, pointY
@@ -217,15 +226,17 @@ class Red3(RedBot):
                 closest_bot = curr_bot
 
         return closest_bot, shortest_distance
-    
+
     @staticmethod
     def closest_enemy_to_self(self: RedBot, ignore):
         # todo - make more efficient
         closest_bot = Globals.blue_bots[0]
         closer_bot = Globals.red_bots[0]
-        shortest_distance = self.point_to_point_distance(closest_bot.x, closest_bot.y, self.x, self.y)
+        shortest_distance = self.point_to_point_distance(
+            closest_bot.x, closest_bot.y, self.x, self.y)
         for curr_bot in Globals.blue_bots:
-            curr_bot_dist = self.point_to_point_distance(curr_bot.x, curr_bot.y, self.x, self.y)
+            curr_bot_dist = self.point_to_point_distance(
+                curr_bot.x, curr_bot.y, self.x, self.y)
             for red_bot in Globals.red_bots:
                 # * check enemy distance from self to bot from loop
                 if curr_bot_dist < shortest_distance:
@@ -247,12 +258,14 @@ class Red3(RedBot):
             self.turn_towards(Globals.SCREEN_WIDTH, self.y)
             self.drive_forward(Globals.FAST)
         elif self.rect.right >= Globals.SCREEN_WIDTH / 2:
-            self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
+            self.turn_towards(Globals.red_flag.x,
+                              Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         else:
-            self.turn_towards(Globals.red_flag.x, Globals.red_flag.y, Globals.FAST)
+            self.turn_towards(Globals.red_flag.x,
+                              Globals.red_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
-    
+
     @staticmethod
     def angleRelative(self: RedBot, x, y):
         LEFT = False
