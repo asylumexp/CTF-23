@@ -14,7 +14,7 @@ class STATE(Enum):
 class Red5(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
-        self.curr_state = STATE.NORTH_CAROLINA
+        self.curr_state = STATE.ATTACK
         self.priority = Priority_List(
             [STATE.ATTACK, STATE.BAIT_PREPARE, STATE.BAIT_BAIT, STATE.BAIT_WAIT, STATE.JAILBREAK], [2, 3, 4, 5, 1])
         try:
@@ -31,16 +31,16 @@ class Red5(RedBot):
         finally:
             if self.curr_state == STATE.BAIT_PREPARE:
                 Globals.red_bots[2].bait_bot_prepare(
-                    self, 650, 75, STATE.BAIT_TRUE)
+                    self, 650, 75, STATE.BAIT_WAIT)
             elif self.curr_state == STATE.ATTACK:
                 Globals.red_bots[2].general_bot_attack(
-                    self, STATE.NORTH_CAROLINA)
+                    self, STATE.BAIT_PREPARE)
             elif self.curr_state == STATE.BAIT_WAIT:
-                Globals.red_bots[2].bait_bot_wait(self, STATE.BALTIMORE)
+                Globals.red_bots[2].bait_bot_wait(self, STATE.BAIT_BAIT)
             elif self.curr_state == STATE.BAIT_BAIT:
                 Globals.red_bots[2].bait_bot_bait(self, STATE.JAIL)
             elif self.curr_state == STATE.JAIL:
-                Globals.red_bots[2].general_bot_jailed(self, STATE.MISSOURI)
+                Globals.red_bots[2].general_bot_jailed(self, STATE.ATTACK)
             else:
                 self.curr_state = STATE.NORTH_CAROLINA
 
