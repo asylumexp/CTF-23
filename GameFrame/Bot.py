@@ -30,6 +30,7 @@ class Bot(RoomObject):
             self.get_flag = self.get_flag_blue
             self.set_local_flag_height = self.set_local_flag_height_blue
             self.add_points_close_to_flag = self.add_points_close_to_flag_blue
+            self.distance_to_flag = self.distance_to_flag_blue
         else:
             self.FLAG_TO_STEAL_WINNER = Globals.RED_FLAG_WINNER
             self.START_DIRECTION = 90
@@ -44,6 +45,7 @@ class Bot(RoomObject):
             self.get_flag = self.get_flag_red
             self.set_local_flag_height = self.set_local_flag_height_red
             self.add_points_close_to_flag = self.add_points_close_to_flag_red
+            self.distance_to_flag = self.distance_to_flag_red
 
         bot_image = self.load_image(self.IMAGE)
         self.set_image(bot_image, 25, 25)
@@ -155,7 +157,7 @@ class Bot(RoomObject):
 
         if self.on_enemy_side():
             add_points = 1
-            distance = self.point_to_point_distance(self.x, self.y, Globals.blue_flag.x, Globals.blue_flag.y)
+            distance = self.distance_to_flag()
             if self.has_flag:
                 add_points += 50
             elif distance < 50:
@@ -168,7 +170,6 @@ class Bot(RoomObject):
             self.add_points_close_to_flag(add_points)
 
         # Run the specific bot logic
-        # todo could add in some custom exception handling for students
         try:
             self.tick()
         except Exception:
@@ -239,3 +240,19 @@ class Bot(RoomObject):
     @staticmethod
     def add_points_close_to_flag_red(points):
         Globals.red_enemy_side_time += points
+
+    def distance_to_flag_blue(self):
+        return self.point_to_point_distance(
+            self.x,
+            self.y,
+            Globals.blue_flag.x,
+            Globals.blue_flag.y
+        )
+
+    def distance_to_flag_red(self):
+        return self.point_to_point_distance(
+            self.x,
+            self.y,
+            Globals.red_flag.x,
+            Globals.red_flag.y
+        )
