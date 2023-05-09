@@ -32,6 +32,8 @@ class Red5(RedBot):
             Globals.red_bots[2].bait_bot_bait(self, STATE.JAIL)
         elif self.curr_state == STATE.JAIL:
             Globals.red_bots[2].general_bot_jailed(self, STATE.MISSOURI)
+        elif self.curr_state == STATE.JAILBREAK:
+            Globals.red_bots[2].jailbreak(self, STATE.JAILBREAK)
         else:
             self.curr_state = STATE.NORTH_CAROLINA
 
