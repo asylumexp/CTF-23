@@ -36,8 +36,10 @@ class Arena(Level):
         Globals.blue_bots.append(Blue5(self, 228, Globals.SCREEN_HEIGHT / 4 * 3))
 
         blue_jail_bars = Logo(self, 16, 64, "jail_bars.png", 100, 100)
+        blue_jail_bars.depth = 1000
         self.add_room_object(blue_jail_bars)
         red_jail_bars = Logo(self, Globals.GAME_AREA_WIDTH_MAX - 84, Globals.GAME_AREA_HEIGHT_MAX - 100, "jail_bars.png", 100, 100)
+        red_jail_bars.depth = 1000
         self.add_room_object(red_jail_bars)
 
         for i in range(len(Globals.red_bots)):
