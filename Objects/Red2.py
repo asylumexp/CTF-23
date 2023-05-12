@@ -22,20 +22,18 @@ class Red2(RedBot):
     def tick(self):
         # Lame declaring outside init becuz of weird glitch with gameframe
         self.psuedoflagx = Globals.blue_flag.x - 250
-        print(f" Corey's Bot is in the state, {self.curr_state}")
         if self.x < 660:
             self.curr_state == STATE.RETURN
         if self.curr_state == STATE.WAIT:
             self.wait()
         elif self.curr_state == STATE.ATTACK:
-            Globals.red_bots[2].general_bot_attack(self, STATE.WAIT)
+            self.attack()
         elif self.curr_state == STATE.JAILBREAK:
-            Globals.red_bots[2].jailbreak(self, STATE.JAILBREAK)
+            self.jailbreak()
         elif self.curr_state == STATE.RETURN:
-            Globals.red_bots[2].return_home(self, STATE.RETURN)
+            self.return_home()
         else:
             self.curr_state = STATE.WAIT
-
 
     def wait(self):
         bot, distance = self.closest_enemy_to_self(True)
@@ -50,11 +48,40 @@ class Red2(RedBot):
             if bot_jailed:
                 self.curr_state = STATE.JAILBREAK
 
-    
+    def attack(self):
+        bot, distance = self.closest_enemy_to_self(True)
+        angle = self.angleRelative(bot.x, bot.y)
+        self.turn_towards(bot.x + 20, bot.y, Globals.FAST)
+        if distance < 200 and angle < 70:
+            self.drive_forward(Globals.FAST)
+        if distance > 200:
+            self.curr_state = STATE.WAIT
 
-    
+    def jailbreak(self):
+        bot_jailed = False
+        for team_bot in Globals.red_bots:
+            if team_bot.jailed:
+                bot_jailed = True
+                break
+        if not bot_jailed:
+            self.curr_state = STATE.RETURN
+        else:
+            angle = self.angleRelative(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100)
+            self.turn_towards(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100, Globals.FAST)
+            if angle < 120:
+                self.drive_forward(Globals.FAST)
 
-
+    def return_home(self):
+        # if self.x <= self.psuedoflagx-40 or self.x >= self.psuedoflagx-50:
+        # self.turn_towards(self.psuedoflagx-40, Globals.blue_flag.y, Globals.FAST)
+        # self.drive_forward(Globals.FAST)
+        if (self.point_to_point_distance(self.x, self.y, self.psuedoflagx, Globals.blue_flag.y) > 40):
+            # i = self.angleRelative(self.psuedoflagx, Globals.blue_flag.y)
+            # if i < 0 or i > 40:
+            self.turn_towards(self.psuedoflagx, Globals.blue_flag.y, Globals.FAST)
+            self.drive_forward(Globals.FAST)
+        else:
+            self.curr_state = STATE.WAIT
 
     def closest_enemy_to_flag(self):
         closest_bot = Globals.blue_bots[0]
