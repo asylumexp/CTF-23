@@ -293,16 +293,17 @@ class Red3(RedBot):
         return angle
     
     @staticmethod
-    def jailbreak(self: RedBot, STATE):
+    def jailbreak(self: RedBot, return_state: STATE):
         bot_jailed = False
         for team_bot in Globals.red_bots:
             if team_bot.jailed:
                 bot_jailed = True
                 break
         if not bot_jailed:
-            self.curr_state = STATE.RETURN
+            self.curr_state = return_state
         else:
             angle = self.angleRelative(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100)
             self.turn_towards(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100, Globals.FAST)
             if angle < 120:
                 self.drive_forward(Globals.FAST)
+

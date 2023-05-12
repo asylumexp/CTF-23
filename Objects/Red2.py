@@ -7,12 +7,14 @@ class STATE(Enum):
     ATTACK = 1
     JAILBREAK = 2
     RETURN = 3
+    TESTING = 4
 
 
 class Red2(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
         self.curr_state = STATE.RETURN
+        
         try:
             self.set_image("Images/r2.png", 25, 25)
         except FileNotFoundError:
@@ -28,12 +30,19 @@ class Red2(RedBot):
             self.wait()
         elif self.curr_state == STATE.ATTACK:
             self.attack()
+        elif self.curr_state == STATE.TESTING:
+            self.testing()
         elif self.curr_state == STATE.JAILBREAK:
             self.jailbreak()
         elif self.curr_state == STATE.RETURN:
             self.return_home()
         else:
             self.curr_state = STATE.WAIT
+
+    def testing(self):
+        for i in range(1000):
+            self.turn_towards(Globals.red_flag.x, Globals.red_flag.y)
+            self.drive_forward(Globals.FAST)
 
     def wait(self):
         bot, distance = self.closest_enemy_to_self(True)
@@ -47,6 +56,10 @@ class Red2(RedBot):
                     break
             if bot_jailed:
                 self.curr_state = STATE.JAILBREAK
+        self.turn_left(Globals.FAST)
+        self.turn_left(Globals.FAST)
+        self.turn_left(Globals.FAST)
+        self.drive_forward(Globals.FAST)
 
     def attack(self):
         bot, distance = self.closest_enemy_to_self(True)
