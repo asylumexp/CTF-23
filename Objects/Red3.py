@@ -217,21 +217,20 @@ class Red3(RedBot):
     # * Evade bots\
     @staticmethod
     def evadeBots(self: RedBot):
-        
-        closest_enemy, dist = Globals.red_bots[2].closest_enemy_to_self(self, True)
-        if Globals.red_bots[2].angleRelative(self, closest_enemy.x, closest_enemy.y) < 0:
-            self.turn_right(Globals.MEDIUM)
-        else:
-            self.turn_left(Globals.MEDIUM)
-        # Driving forward
-        self.drive_forward(Globals.FAST)
-
-    # * Get opposite direction from self, from winner 2020 code
-    def oppositeDirection(self):
+  
         closest_bot, dist = Globals.red_bots[2].closest_enemy_to_self(self, True)
         pointX = self.x - closest_bot.x
         pointY = self.y - closest_bot.y
-        return pointX, pointY
+        if Globals.red_bots[2].angleRelative(self, closest_bot.x, closest_bot.y) < 0:
+            self.turn_towards(pointX, pointY)
+        elif Globals.red_bots[2].angleRelative(self, closest_bot.x, closest_bot.y) < 100:
+            self.turn_left(Globals.MEDIUM)
+        else:
+            self.turn_right(Globals.MEDIUM)
+        self.drive_forward(Globals.FAST)
+
+    # * Get opposite direction from self, from winner 2020 code
+   
 
     
    
