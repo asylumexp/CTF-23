@@ -14,7 +14,6 @@ class Red2(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
         self.curr_state = STATE.RETURN
-        
         try:
             self.set_image("Images/r2.png", 25, 25)
         except FileNotFoundError:
@@ -23,6 +22,8 @@ class Red2(RedBot):
 
     def tick(self):
         # Lame declaring outside init becuz of weird glitch with gameframe
+        print(f"corey's dumb bot is in {self.curr_state}")
+        print(Globals.red_bots[1].x, Globals.red_bots[1].y)
         self.psuedoflagx = Globals.blue_flag.x - 250
         if self.x < 660:
             self.curr_state == STATE.RETURN
@@ -46,8 +47,11 @@ class Red2(RedBot):
 
     def wait(self):
         bot, distance = self.closest_enemy_to_self(True)
-        if distance < 200:
-            self.curr_state = STATE.ATTACK
+        if distance < 250:
+            if self.x < 600:
+                self.curr_state = STATE.RETURN
+            else:
+                self.curr_state = STATE.ATTACK
         else:
             bot_jailed = False
             for team_bot in Globals.red_bots:
@@ -56,9 +60,12 @@ class Red2(RedBot):
                     break
             if bot_jailed:
                 self.curr_state = STATE.JAILBREAK
-        self.turn_left(Globals.FAST)
-
+        self.turn_towards(800, 300)
         self.drive_forward(Globals.FAST)
+     
+     
+
+        
 
     def attack(self):
         bot, distance = self.closest_enemy_to_self(True)
@@ -84,12 +91,7 @@ class Red2(RedBot):
                 self.drive_forward(Globals.FAST)
 
     def return_home(self):
-        # if self.x <= self.psuedoflagx-40 or self.x >= self.psuedoflagx-50:
-        # self.turn_towards(self.psuedoflagx-40, Globals.blue_flag.y, Globals.FAST)
-        # self.drive_forward(Globals.FAST)
         if (self.point_to_point_distance(self.x, self.y, self.psuedoflagx, Globals.blue_flag.y) > 40):
-            # i = self.angleRelative(self.psuedoflagx, Globals.blue_flag.y)
-            # if i < 0 or i > 40:
             self.turn_towards(self.psuedoflagx, Globals.blue_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         else:
