@@ -9,6 +9,7 @@ class STATE(Enum):
     BAIT_TRUE = 4  # * Prepare bait state
     JAIL = 5  # * Jail state
     JAILBREAK = 6 # * Jail Break State
+    FLAGRETURN = 7
 
 
 class Red5(RedBot):
@@ -34,8 +35,42 @@ class Red5(RedBot):
             Globals.red_bots[2].general_bot_jailed(self, STATE.MISSOURI)
         elif self.curr_state == STATE.JAILBREAK:
             Globals.red_bots[2].jailbreak(self, STATE.JAILBREAK)
+        elif self.curr_state == STATE.FLAGRETURN:
+            self.flagreturn()
         else:
             self.curr_state = STATE.NORTH_CAROLINA
 
 
-    
+    def bait_bot_prepare(self: RedBot, bait_position_x: int, bait_position_y: int, wait_state: STATE):
+        bot, distance = Globals.red_bots[2].closest_enemy_to_flag()
+        if self.x <= bait_position_x - 6 or self.x >= bait_position_x + 6:
+            self.turn_towards(bait_position_x, bait_position_y, Globals.FAST)
+            self.drive_forward(Globals.FAST)
+            if Globals.red_bots[4].curr_state == STATE.JAILBREAK:
+                self.curr_state = STATE.FLAGRETURN 
+        else:
+            self.curr_state = wait_state
+
+
+    def flagreturn(self):
+        bot, distance = self.closest_enemy_to_flag()
+        flagAngle = abs(self.angleRelative(Globals.blue_flag.x, Globals.blue_flag.y))
+        if distance < 350:
+            self.curr_state = STATE.MISSOURI
+        elif (
+            self.point_to_point_distance(
+                self.x, self.y, Globals.blue_flag.x, Globals.blue_flag.y
+            )
+            > 20
+        ):
+            if flagAngle < 80:
+                self.turn_towards(
+                    Globals.blue_flag.x, Globals.blue_flag.y, Globals.FAST
+                )
+                self.drive_forward(Globals.FAST)
+            else:
+                self.turn_towards(
+                    Globals.blue_flag.x, Globals.blue_flag.y, Globals.FAST
+                )
+        else:
+            self.curr_state = STATE.NORTH_CAROLINA

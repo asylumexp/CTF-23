@@ -57,8 +57,7 @@ class Red2(RedBot):
             if bot_jailed:
                 self.curr_state = STATE.JAILBREAK
         self.turn_left(Globals.FAST)
-        self.turn_left(Globals.FAST)
-        self.turn_left(Globals.FAST)
+
         self.drive_forward(Globals.FAST)
 
     def attack(self):
