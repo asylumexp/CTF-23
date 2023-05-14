@@ -47,7 +47,7 @@ class Red2(RedBot):
 
     def wait(self):
         bot, distance = self.closest_enemy_to_self(True)
-        if distance < 250:
+        if distance < 175:
             if self.x < 600:
                 self.curr_state = STATE.RETURN
             else:
@@ -60,8 +60,8 @@ class Red2(RedBot):
                     break
             if bot_jailed:
                 self.curr_state = STATE.JAILBREAK
-        self.turn_towards(800, 300)
-        self.drive_forward(Globals.FAST)
+        self.turn_towards(Globals.blue_flag.x + 200, 300)
+        self.drive_forward(Globals.MEDIUM)
      
      
 
