@@ -7,6 +7,7 @@ class STATE(Enum):
     ATTACK = 1
     JAILBREAK = 2
     RETURN = 3
+    TESTING = 4
 
 
 class Red2(RedBot):
@@ -19,8 +20,13 @@ class Red2(RedBot):
             print("hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red2 which is awkward gotta say so bye have fun doing the competition.")
 
 
+    def weeweewoowah(self):
+        pass
+
     def tick(self):
         # Lame declaring outside init becuz of weird glitch with gameframe
+        print(f"corey's dumb bot is in {self.curr_state}")
+        print(Globals.red_bots[1].x, Globals.red_bots[1].y)
         self.psuedoflagx = Globals.blue_flag.x - 250
         if self.x < 660:
             self.curr_state == STATE.RETURN
@@ -28,6 +34,8 @@ class Red2(RedBot):
             self.wait()
         elif self.curr_state == STATE.ATTACK:
             self.attack()
+        elif self.curr_state == STATE.TESTING:
+            self.testing()
         elif self.curr_state == STATE.JAILBREAK:
             self.jailbreak()
         elif self.curr_state == STATE.RETURN:
@@ -35,10 +43,18 @@ class Red2(RedBot):
         else:
             self.curr_state = STATE.WAIT
 
+    def testing(self):
+        for i in range(1000):
+            self.turn_towards(Globals.red_flag.x, Globals.red_flag.y)
+            self.drive_forward(Globals.FAST)
+
     def wait(self):
         bot, distance = self.closest_enemy_to_self(True)
-        if distance < 200:
-            self.curr_state = STATE.ATTACK
+        if distance < 175:
+            if self.x < 600:
+                self.curr_state = STATE.RETURN
+            else:
+                self.curr_state = STATE.ATTACK
         else:
             bot_jailed = False
             for team_bot in Globals.red_bots:
@@ -47,6 +63,12 @@ class Red2(RedBot):
                     break
             if bot_jailed:
                 self.curr_state = STATE.JAILBREAK
+        self.turn_towards(Globals.blue_flag.x + 200, 300)
+        self.drive_forward(Globals.MEDIUM)
+     
+     
+
+        
 
     def attack(self):
         bot, distance = self.closest_enemy_to_self(True)
@@ -72,12 +94,7 @@ class Red2(RedBot):
                 self.drive_forward(Globals.FAST)
 
     def return_home(self):
-        # if self.x <= self.psuedoflagx-40 or self.x >= self.psuedoflagx-50:
-        # self.turn_towards(self.psuedoflagx-40, Globals.blue_flag.y, Globals.FAST)
-        # self.drive_forward(Globals.FAST)
         if (self.point_to_point_distance(self.x, self.y, self.psuedoflagx, Globals.blue_flag.y) > 40):
-            # i = self.angleRelative(self.psuedoflagx, Globals.blue_flag.y)
-            # if i < 0 or i > 40:
             self.turn_towards(self.psuedoflagx, Globals.blue_flag.y, Globals.FAST)
             self.drive_forward(Globals.FAST)
         else:

@@ -1,5 +1,4 @@
 from GameFrame import RedBot, Globals
-import random
 from enum import Enum
 
 
@@ -9,6 +8,7 @@ class STATE(Enum):
     CHILL = 1
     STRIKE = 2
     FLAGRETURN = 3
+    JAILBREAK = 4
 
 
 class Red1(RedBot):
@@ -31,6 +31,8 @@ class Red1(RedBot):
             self.wait()
         elif self.curr_state == STATE.STRIKE:
             self.STRIKE()
+        elif self.curr_state == STATE.JAILBREAK:
+            self.jailbreak()
         else:
             self.curr_state = STATE.CHILL
 
@@ -57,11 +59,39 @@ class Red1(RedBot):
         else:
             self.curr_state = STATE.CHILL
 
+    def jailbreak(self):
+        bot_jailed = False
+        if Globals.red_bots[1].jailed:
+            bot_jailed = True
+        if not bot_jailed:
+            self.curr_state = STATE.FLAGRETURN
+        else:
+            self.justincase()
+            
+
+    def justincase(self):
+        bot, distance = self.closest_enemy_to_flag()
+        if distance < 300:
+            self.curr_state == STATE.FLAGRETURN
+        else:
+            angle = self.angleRelative(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100)
+            self.turn_towards(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100, Globals.FAST)
+            if angle < 120:
+                self.drive_forward(Globals.FAST)
+                
     def wait(self):
         bot, distance = self.closest_enemy_to_flag()
         self.turn_towards(bot.x, bot.y, Globals.FAST)
         if distance < 175:
             self.curr_state = STATE.STRIKE
+        else:
+            bot_jailed = False
+            for team_bot in Globals.red_bots:
+                if team_bot.jailed:
+                    bot_jailed = True
+                    break
+            if bot_jailed:
+                self.curr_state = STATE.JAILBREAK
 
     def STRIKE(self):
         bot, distance = self.closest_enemy_to_flag()
