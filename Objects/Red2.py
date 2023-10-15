@@ -25,8 +25,8 @@ class Red2(RedBot):
 
     def tick(self):
         # Lame declaring outside init becuz of weird glitch with gameframe
-        print(f"corey's dumb bot is in {self.curr_state}")
-        print(Globals.red_bots[1].x, Globals.red_bots[1].y)
+        # print(f"corey's dumb bot is in {self.curr_state}")
+        # print(Globals.red_bots[1].x, Globals.red_bots[1].y)
         self.psuedoflagx = Globals.blue_flag.x - 250
         if self.x < 660:
             self.curr_state == STATE.RETURN

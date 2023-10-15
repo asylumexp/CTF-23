@@ -8,23 +8,23 @@ class STATE(Enum):
     BALTIMORE = 3  # * Bait state
     BAIT_TRUE = 4  # * Prepare bait state
     JAIL = 5  # * Jail state
-    JAILBREAK = 6 # * Jail Break State
-
+    JAILBREAK = 6  # * Jail Break State
 
 
 class Red5(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
-        self.curr_state = STATE.NORTH_CAROLINA
-        try:
-            self.set_image("Images/RED5.png", 25, 25)
-        except FileNotFoundError:
-            print("hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red5 which is awkward gotta say so bye have fun doing the competition.")
+        # Globals.red_bots[2].general_stack_turn(self, self.x-50, self.y-50)
+        self.curr_state = None
+        # try:
+        #     self.set_image("Images/RED5.png", 25, 25)
+        # except FileNotFoundError:
+        #     print("hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red5 which is awkward gotta say so bye have fun doing the competition.")
 
     def tick(self):
-        # * States
         if self.curr_state == STATE.NORTH_CAROLINA:
-            Globals.red_bots[2].bait_bot_prepare(self, 650, 75, STATE.BAIT_TRUE)
+            Globals.red_bots[2].bait_bot_prepare(
+                self, 650, 75, STATE.BAIT_TRUE)
         elif self.curr_state == STATE.MISSOURI:
             Globals.red_bots[2].general_bot_attack(self, STATE.NORTH_CAROLINA)
         elif self.curr_state == STATE.BAIT_TRUE:
