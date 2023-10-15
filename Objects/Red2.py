@@ -88,8 +88,8 @@ class Red2(RedBot):
         if not bot_jailed:
             self.curr_state = STATE.RETURN
         else:
-            angle = self.angleRelative(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100)
-            self.turn_towards(Globals.SCREEN_WIDTH - 75, Globals.SCREEN_HEIGHT - 100, Globals.FAST)
+            angle = self.angleRelative(Globals.SCREEN_WIDTH - 65, Globals.SCREEN_HEIGHT - 85)
+            self.turn_towards(Globals.SCREEN_WIDTH - 65, Globals.SCREEN_HEIGHT - 85, Globals.FAST)
             if angle < 120:
                 self.drive_forward(Globals.FAST)
 
