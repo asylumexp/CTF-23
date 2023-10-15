@@ -1,47 +1,8 @@
 from GameFrame import BlueBot, Globals
 from enum import Enum
 
+
 class STATE(Enum):
-    MISSOURI = 1  # * Strike state
-    NORTH_CAROLINA = 2  # * Move to area state
-    BALTIMORE = 3  # * Bait state
-    BAIT_TRUE = 4  # * Prepare bait state
-    JAIL = 5  # * Jail state
-    JAILBREAK = 6 # * Jail Break State
-
-
-
-class Blue5(BlueBot):
-    def __init__(self, room, x, y):
-        BlueBot.__init__(self, room, x, y)
-        self.curr_state = STATE.NORTH_CAROLINA
-        try:
-            self.set_image("Images/b5.png", 25, 25)
-        except FileNotFoundError:
-            print("hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red5 which is awkward gotta say so bye have fun doing the competition.")
-
-    def tick(self):
-        # * States
-        if self.curr_state == STATE.NORTH_CAROLINA:
-            Globals.blue_bots[2].bait_bot_prepare(self, 650, 75, STATE.BAIT_TRUE)
-        elif self.curr_state == STATE.MISSOURI:
-            Globals.blue_bots[2].general_bot_attack(self, STATE.NORTH_CAROLINA)
-        elif self.curr_state == STATE.BAIT_TRUE:
-            Globals.blue_bots[2].bait_bot_wait(self, STATE.BALTIMORE)
-        elif self.curr_state == STATE.BALTIMORE:
-            Globals.blue_bots[2].bait_bot_bait(self, STATE.JAIL)
-        elif self.curr_state == STATE.JAIL:
-            Globals.blue_bots[2].general_bot_jailed(self, STATE.MISSOURI)
-        elif self.curr_state == STATE.JAILBREAK:
-            Globals.blue_bots[2].jailbreak(self, STATE.JAILBREAK)
-        else:
-            self.curr_state = STATE.NORTH_CAROLINA
-
-
-
-
-
-'''class STATE(Enum):
     WAIT = 1
     ATTACK = 2
     FLAG = 3
@@ -248,4 +209,4 @@ class Blue5(BlueBot):
         angle = self.get_rotation_to_coordinate(x, y)
         if angle < 0:
             angle += 360
-        return angle'''
+        return angle
