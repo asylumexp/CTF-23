@@ -181,18 +181,25 @@ class Red3(RedBot):
         self.curr_state = next_state
 
     @staticmethod
-    def general_bot_attack(self: RedBot, return_state: STATE):
-        """General Attack State 
+    def general_bot_attack(self: RedBot, return_state: STATE, forced=False, forced_bot=None):
+        """General Attack State
 
         Args:
             self (RedBot): the bot calling the function
             next_state (STATE): state to change to immediately.
         """
         # * Check for bot
-        bot, distance = Globals.red_bots[2].closest_enemy_to_self(self, False)
-        angle = Globals.red_bots[2].angleRelative(self, bot.x, bot.y)
-        self.turn_towards(bot.x, bot.y, Globals.SLOW)
-        self.drive_forward(Globals.FAST)
+        if not forced:
+            bot, distance = Globals.red_bots[2].closest_enemy_to_self(self, False)
+            angle = Globals.red_bots[2].angleRelative(self, bot.x, bot.y)
+            self.turn_towards(bot.x, bot.y, Globals.SLOW)
+            self.drive_forward(Globals.FAST)
+        else:
+            angle = Globals.red_bots[2].angleRelative(self, forced_bot.x, forced_bot.y)
+            if angle < 0 or angle > 45:
+                self.turn_towards(forced_bot.x + 20, forced_bot.y, Globals.SLOW)
+            else:
+                self.drive_forward(Globals.FAST)
 
     """
     Helper Functions
