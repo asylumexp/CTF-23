@@ -16,7 +16,6 @@ class Blue4(BlueBot):
     def __init__(self, room, x, y):
         BlueBot.__init__(self, room, x, y)
         self.curr_state = STATE.WAIT
-        self.set_image("Images/b4.png", 25, 25)
 
     def tick(self):
         if self.curr_state == STATE.WAIT:
@@ -43,8 +42,8 @@ class Blue4(BlueBot):
         if distance < 250:
             self.curr_state = STATE.ATTACK
         # todo Wait for Bait
-        if self.x <= 594 or self.x >= 606:
-            self.turn_towards(600, 400, Globals.FAST)
+        if self.x <= 545 or self.x >= 555:
+            self.turn_towards(550, 400, Globals.FAST)
             self.drive_forward(Globals.FAST)
         else:
             self.curr_state = STATE.PREPARE

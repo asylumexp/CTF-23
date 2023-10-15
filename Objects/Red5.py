@@ -14,12 +14,8 @@ class STATE(Enum):
 class Red5(RedBot):
     def __init__(self, room, x, y):
         RedBot.__init__(self, room, x, y)
-        # Globals.red_bots[2].general_stack_turn(self, self.x-50, self.y-50)
         self.curr_state = None
-        # try:
-        #     self.set_image("Images/RED5.png", 25, 25)
-        # except FileNotFoundError:
-        #     print("hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red5 which is awkward gotta say so bye have fun doing the competition.")
+        
 
     def tick(self):
         if self.curr_state == STATE.NORTH_CAROLINA:

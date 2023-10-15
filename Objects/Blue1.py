@@ -19,7 +19,6 @@ class Blue1(BlueBot):
         self.bot3ready = False
         self.bot4ready = False
         self.bot5ready = False
-        self.set_image("Images/b1.png", 25, 25)
 
     def tick(self):
         if self.curr_state == STATE.FLAGRETURN:

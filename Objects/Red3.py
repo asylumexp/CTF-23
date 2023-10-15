@@ -23,16 +23,8 @@ class Red3(RedBot):
         RedBot.__init__(self, room, x, y)
         self.curr_state = "hello"
         self.prev_x_enemy = 0
-        try:
-            self.set_image("Images/r3.png", 25, 25)
-        except FileNotFoundError:
-            print("hello this is me making a error checking for the set image we used images in our testing so we actually knew which bot was which if youre seeing this that means we again forgot to remove the set image for red3 which is awkward gotta say so bye have fun doing the competition.")
 
     def tick(self):
-        # if self.curr_state == "hello":
-        #     print("hello")
-        #     print(self.x, self.y)
-        #     self.general_stack_drive(self, 600, 250)
         if self.curr_state == STATE.WAIT:
             self.bait_bot_prepare(self, 650, 600, STATE.PREPARE)
         elif self.curr_state == STATE.ATTACK:

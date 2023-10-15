@@ -16,7 +16,6 @@ class Blue5(BlueBot):
     def __init__(self, room, x, y):
         BlueBot.__init__(self, room, x, y)
         self.curr_state = STATE.WAIT
-        self.set_image("Images/b5.png", 25, 25)
 
     def tick(self):
         if self.curr_state == STATE.WAIT:
